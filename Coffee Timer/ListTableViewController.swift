@@ -17,7 +17,6 @@ class ListTableViewController: UITableViewController {
             NSSortDescriptor(key: "type", ascending: true),
             NSSortDescriptor(key: "displayOrder", ascending: true)
         ]
-        
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
         controller.delegate = self
         return controller
@@ -39,7 +38,7 @@ class ListTableViewController: UITableViewController {
         if !fetchedResultsController.performFetch(error) {
             println("Error fetching: \(error)")
         }
-        title = "Drinks"
+        title = "Shopping List"
         navigationItem.leftBarButtonItem = editButtonItem()
         self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
     }
