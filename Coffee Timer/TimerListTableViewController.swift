@@ -43,7 +43,6 @@ class TimerListTableViewController: UITableViewController {
         return fetchedResultsController.objectAtIndexPath(indexPath) as! TimerModel
     }
     
-
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let cell = sender as? UITableViewCell {
             let indexPath = tableView.indexPathForCell(cell)!
@@ -89,24 +88,20 @@ class TimerListTableViewController: UITableViewController {
             println("Error fetching: \(error)")
         }
         title = "Drinks"
+//        self.parentViewController?.navigationItem.title = "Drinks"
+        let tabBarIndex = self.navigationController?.tabBarController?.selectedIndex
+        println("tabBarIndex = \(tabBarIndex)")
         navigationItem.leftBarButtonItem = editButtonItem()
+        self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        
         if presentedViewController != nil {
             tableView.reloadData()
         }
     }
     
-//    override func didReceiveMemoryWarning() {
-//        super.didReceiveMemoryWarning()
-//        // Dispose of any resources that can be recreated.
-//    }
-
-    // MARK: - Table view data source
-
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // Return the number of sections we're displaying
         return count(fetchedResultsController.sections ?? [])
@@ -121,17 +116,14 @@ class TimerListTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo
-        
         return sectionInfo?.numberOfObjects ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
-        
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
         cell.detailTextLabel?.text = timerModel.brand
-        
         return cell
     }
 
@@ -214,8 +206,6 @@ class TimerListTableViewController: UITableViewController {
             return "Teas"
         }
     }
-
-
 }
 
 extension TimerListTableViewController: NSFetchedResultsControllerDelegate {

@@ -9,14 +9,12 @@
 import Foundation
 import CoreData
 
-class CoreDataStack {
+class CoreDataStack: Printable {
     
-//    var options: NSDictionary?
-//    
-//    init(modelName: String, storeName: String,
-//        options: NSDictionary? = nil) {
-//            self.options = options
-//    }
+    var modelName : String
+    var storeName : String
+    var options: [NSObject: AnyObject]?
+    var storeURL: NSURL?
     
     lazy var managedObjectContext: NSManagedObjectContext = {
         let moc = NSManagedObjectContext()
@@ -25,21 +23,36 @@ class CoreDataStack {
     }()
     
     lazy var managedObjectModel: NSManagedObjectModel = {
-        let modelURL = NSBundle.mainBundle().URLForResource("CoffeeTimer", withExtension: "momd")!
+        let modelURL = NSBundle.mainBundle().URLForResource(self.modelName, withExtension: "momd")!
         return NSManagedObjectModel(contentsOfURL: modelURL)!
     }()
     
     lazy var persistentStoreCoordinator: NSPersistentStoreCoordinator = {
         let coordinator = NSPersistentStoreCoordinator(managedObjectModel: self.managedObjectModel)
-        let storeURL = self.applicationDocumentsDirectory().URLByAppendingPathComponent("CoffeeTimer.sqlite")
+        self.storeURL = self.applicationDocumentsDirectory().URLByAppendingPathComponent("\(self.storeName).sqlite")
         
         let errorPointer = NSErrorPointer()
-        if coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: storeURL, options: nil, error: errorPointer) == nil {
+        if coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: self.storeURL, options: nil, error: errorPointer) == nil {
             println("Unresolved error adding persistent store: \(errorPointer.memory)")
         }
         
         return coordinator
     }()
+    
+    var description : String
+    {
+            return "context: \(managedObjectContext)\n" +
+                "modelName: \(modelName)\n" +
+                "model: \(managedObjectModel.entityVersionHashesByName)\n" +
+                "coordinator: \(persistentStoreCoordinator)\n" +
+                "storeURL: \(storeURL)\n"
+    }
+
+    init(modelName:String, storeName:String, options: [NSObject: AnyObject]? = nil) {
+        self.modelName = modelName
+        self.storeName = storeName
+        self.options = options
+    }
     
     func loadDefaultDataIfFirstLaunch() {
         let key = "hasLaunchedBefore"
