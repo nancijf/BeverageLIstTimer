@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 func appDelegate() -> AppDelegate {
     return UIApplication.sharedApplication().delegate as! AppDelegate
@@ -18,12 +19,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
     
     lazy var coreDataStack: CoreDataStack = {
-        return CoreDataStack()
+        return CoreDataStack(
+            modelName: "CoffeeTimer",
+            storeName: "CoffeeTimer",
+            options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true])
     }()
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         println("Application has launched.")
         coreDataStack.loadDefaultDataIfFirstLaunch()
+        println(coreDataStack)
         window?.tintColor = UIColor(red:0.95, green:0.53, blue:0.27, alpha:1)
         return true
     }

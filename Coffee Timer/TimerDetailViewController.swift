@@ -13,14 +13,19 @@ class TimerDetailViewController: UIViewController {
     enum StopTimerReason {
         case Cancelled
         case Completed
+        case Paused
     }
     
     @IBOutlet weak var countdownLabel: UILabel!
-    
     @IBOutlet weak var startStopButton: UIButton!
+    @IBOutlet weak var favoriteButton: NFCheckboxButton!
+    @IBOutlet weak var brandField: UITextField!
+    @IBOutlet weak var coffeeTeaName: UITextField!
+    @IBOutlet weak var resetTimer: UIButton!
     
     var timerModel: TimerModel!
     weak var timer: NSTimer?
+    var pauseTime: NSInteger = 0
     var notification: UILocalNotification?
     var timeRemaining: NSInteger {
         if let fireDate = notification?.fireDate {
@@ -35,10 +40,15 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = timerModel.name
+        title = "Timer"
+        coffeeTeaName.text = timerModel.name
+        coffeeTeaName.enabled = false
+        brandField.text = timerModel.brand
+        brandField.enabled = false
         countdownLabel.text = timerModel.durationText
         timerModel.addObserver(self, forKeyPath: "duration", options: .New, context: nil)
         timerModel.addObserver(self, forKeyPath: "name", options: .New, context: nil)
+        self.favoriteButton.selected = timerModel.favorite
     }
     
     deinit {
@@ -57,9 +67,14 @@ class TimerDetailViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
         
-        // Requestlocal notifications and set up local notification
+        // Request local notifications and set up local notification
         let settings = UIUserNotificationSettings(forTypes: (.Alert | .Sound), categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        super.viewDidDisappear(animated)
+        stopTimer(.Cancelled)
     }
 
     override func didReceiveMemoryWarning() {
@@ -82,7 +97,7 @@ class TimerDetailViewController: UIViewController {
     func startTimer() {
         navigationItem.rightBarButtonItem?.enabled = true
         navigationItem.setHidesBackButton(true, animated: true)
-        startStopButton.setTitle("Stop Timer", forState: .Normal)
+        startStopButton.setTitle("Stop", forState: .Normal)
         startStopButton.setTitleColor(UIColor.redColor(), forState: .Normal)
         timer = NSTimer.scheduledTimerWithTimeInterval(1,
             target: self,
@@ -92,7 +107,12 @@ class TimerDetailViewController: UIViewController {
         // Set up local notification
         let localNotification = UILocalNotification()
         localNotification.alertBody = "Timer Completed!"
-        localNotification.fireDate = NSDate().dateByAddingTimeInterval(NSTimeInterval(timerModel.duration))
+        if (pauseTime > 0) {
+            localNotification.fireDate = NSDate().dateByAddingTimeInterval(NSTimeInterval(pauseTime))
+        }
+        else {
+            localNotification.fireDate = NSDate().dateByAddingTimeInterval(NSTimeInterval(timerModel.duration))
+        }
         localNotification.soundName = UILocalNotificationDefaultSoundName
         UIApplication.sharedApplication().scheduleLocalNotification(localNotification)
         notification = localNotification
@@ -101,26 +121,35 @@ class TimerDetailViewController: UIViewController {
     
     func stopTimer(reason: StopTimerReason) {
         navigationItem.setHidesBackButton(false, animated: true)
-        countdownLabel.text = timerModel.durationText
-        startStopButton.setTitle("Start Timer", forState: .Normal)
+        pauseTime = timeRemaining
+        startStopButton.setTitle("Start", forState: .Normal)
         startStopButton.setTitleColor(UIColor.blackColor(), forState: .Normal)
         timer?.invalidate()
         
         if reason == .Cancelled {
             UIApplication.sharedApplication().cancelAllLocalNotifications()
+            countdownLabel.text = timerModel.durationText
+            notification = nil
+            pauseTime = 0
+        } else if reason == .Completed {
+            pauseTime = 0
         }
-        notification = nil
     }
     
     @IBAction func buttonWasPressed(sender: AnyObject) {
-        println("Button was pressed.")
+//        println("Button was pressed.")
         if let _ = timer {
             // Timer is running and button was pressed. Stop timer.
-            stopTimer(.Cancelled)
+            stopTimer(.Paused)
         } else {
             // Timer is not running and button is pressed. Start timer.
             startTimer()
         }
+    }
+    
+    @IBAction func resetWasPressed(sender: AnyObject) {
+//        println("Reset was pressed.")
+        stopTimer(.Cancelled)
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {

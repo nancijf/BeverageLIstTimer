@@ -96,7 +96,6 @@ class TimerEditViewController: UIViewController {
         minutesSlider.value = Float(numberOfMinutes)
         secondsSlider.value = Float(numberOfSeconds)
         favoriteButton.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)
-
     }
 
     override func didReceiveMemoryWarning() {
