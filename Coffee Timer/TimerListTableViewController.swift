@@ -120,7 +120,7 @@ class TimerListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
-        cell.detailTextLabel?.text = timerModel.brand
+        cell.detailTextLabel?.text = timerModel.brand.name
         return cell
     }
     

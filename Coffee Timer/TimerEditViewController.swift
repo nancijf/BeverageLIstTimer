@@ -31,7 +31,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         timerModel.favorite = favoriteButton.selected
         timerModel.name = nameField.text
-        timerModel.brand = brandField.text
+        timerModel.brand.name = brandField.text
         timerModel.duration = Int32(Int(minutesSlider.value) * 60 + Int(secondsSlider.value))
 //        println("favorite = \(favoriteButton.selected)")
         if timerTypeSegmentedControl.selectedSegmentIndex == 0 {
@@ -82,7 +82,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         let numberOfMinutes = Int(timerModel.duration / 60)
         let numberOfSeconds = Int(timerModel.duration % 60)
         nameField.text = timerModel.name
-        brandField.text = timerModel.brand
+        brandField.text = timerModel.brand.name
         favoriteButton.selected = timerModel.favorite
         
         updateLabelsWithMinutes(numberOfMinutes, seconds: numberOfSeconds)

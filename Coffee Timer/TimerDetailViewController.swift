@@ -62,7 +62,7 @@ class TimerDetailViewController: UIViewController {
         println("in ViewWillLoad")
         coffeeTeaName.text = timerModel.name
         coffeeTeaName.enabled = false
-        brandField.text = timerModel.brand
+        brandField.text = timerModel.brand.name
         brandField.enabled = false
         countdownLabel.text = timerModel.durationText
         timerModel.addObserver(self, forKeyPath: "duration", options: .New, context: nil)
