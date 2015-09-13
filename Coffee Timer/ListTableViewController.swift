@@ -70,7 +70,7 @@ class ListTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath) as! UITableViewCell
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
         cell.detailTextLabel?.text = timerModel.brand

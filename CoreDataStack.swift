@@ -32,7 +32,11 @@ class CoreDataStack: Printable {
         self.storeURL = self.applicationDocumentsDirectory().URLByAppendingPathComponent("\(self.storeName).sqlite")
         
         let errorPointer = NSErrorPointer()
-        if coordinator.addPersistentStoreWithType(NSSQLiteStoreType, configuration: nil, URL: self.storeURL, options: nil, error: errorPointer) == nil {
+        if coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
+            configuration: nil,
+            URL: self.storeURL,
+            options: nil,
+            error: errorPointer) == nil {
             println("Unresolved error adding persistent store: \(errorPointer.memory)")
         }
         
@@ -89,11 +93,7 @@ class CoreDataStack: Printable {
                 
                 model.displayOrder = Int32(i)
             }
-            let error = NSErrorPointer()
-            if !managedObjectContext.save(error) {
-                println("Error saving context: \(error)")
-            }
-
+            appDelegate().saveCoreData()
         }
     }
     

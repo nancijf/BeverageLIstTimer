@@ -24,6 +24,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             storeName: "CoffeeTimer",
             options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true])
     }()
+    
+    func saveCoreData() {
+        let error = NSErrorPointer()
+        if !coreDataStack.managedObjectContext.save(error) {
+            println("Error saving context: \(error)")
+        }
+    }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         println("Application has launched.")
@@ -43,10 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillResignActive(application: UIApplication) {
         println("Application has resigned active.")
-        let error = NSErrorPointer()
-        if !coreDataStack.managedObjectContext.save(error) {
-            println("Error saving context: \(error)")
-        }
+        self.saveCoreData()
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
