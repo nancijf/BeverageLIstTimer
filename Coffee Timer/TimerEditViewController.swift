@@ -13,7 +13,7 @@ import UIKit
     func timerEditViewControllerDidSave(viewController: TimerEditViewController)
 }
 
-class TimerEditViewController: UIViewController, UITextFieldDelegate {
+class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTableViewControllerDelegate {
     
     var creatingNewTimer = false
     var coffeeTimers: [TimerModel]!
@@ -103,6 +103,14 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         stopObservingKeyboardEvents()
     }
     
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "BrandSelection" {
+            let viewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
+            viewController.delegate = self
+            viewController.brandSelected = sender as? BrandModel
+        }
+    }
+    
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
@@ -143,14 +151,15 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         let contentInset = UIEdgeInsetsZero;
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
+        return false
     }
-    */
-
+    
+    func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
+        println("brand: \(brand)")
+        timerModel.brand = brand
+        brandField.text = brand.name
+    }
 }
