@@ -31,7 +31,7 @@ class TimerListTableViewController: UITableViewController {
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
         controller.delegate = self
         return controller
-        }()
+    }()
     
     enum TableSection: Int {
         case Coffee = 0
@@ -86,7 +86,6 @@ class TimerListTableViewController: UITableViewController {
             println("Error fetching: \(error)")
         }
         title = "Drinks"
-//        self.parentViewController?.navigationItem.title = "Drinks"
         let tabBarIndex = self.navigationController?.tabBarController?.selectedIndex
         println("tabBarIndex = \(tabBarIndex)")
         navigationItem.leftBarButtonItem = editButtonItem()

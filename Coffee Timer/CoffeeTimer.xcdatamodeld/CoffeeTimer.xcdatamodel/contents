@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="7701" systemVersion="14F27" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="BrandModel" representedClassName="Coffee_Timer.BrandModel" syncable="YES">
+        <attribute name="favorite" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="TimerModel" representedClassName="Coffee_Timer.TimerModel" syncable="YES">
         <attribute name="brand" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="displayOrder" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -10,5 +14,6 @@
     </entity>
     <elements>
         <element name="TimerModel" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="BrandModel" positionX="-63" positionY="27" width="128" height="75"/>
     </elements>
 </model>
