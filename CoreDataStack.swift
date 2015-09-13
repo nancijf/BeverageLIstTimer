@@ -57,10 +57,34 @@ class CoreDataStack: Printable {
         self.storeName = storeName
         self.options = options
     }
+
+    func loadBrandsFromTextFile(name: String) -> [String] {
+        let filePath = NSBundle.mainBundle().pathForResource(name, ofType: "txt")
+        let fileContents = String(contentsOfFile: filePath!, encoding: NSUTF8StringEncoding, error: nil)
+        let lines : [String] = fileContents!.componentsSeparatedByString("\n")
+        
+        return lines
+    }
+    
+    func loadBrandDataIfNeeded() {
+        let request = NSFetchRequest(entityName: "BrandModel")
+        let results = managedObjectContext.executeFetchRequest(request, error: nil)
+        let brandCount = results?.count
+        if brandCount == 0 {
+            let coffeeBrands = loadBrandsFromTextFile("coffeeBrands")
+            for brand: String in coffeeBrands {
+                let model = NSEntityDescription.insertNewObjectForEntityForName("BrandModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! BrandModel
+                model.name = brand
+            }
+            appDelegate().saveCoreData()
+        }
+    }
     
     func loadDefaultDataIfFirstLaunch() {
         let key = "hasLaunchedBefore"
         let launchedBefore = NSUserDefaults.standardUserDefaults().boolForKey(key)
+        
+        loadBrandDataIfNeeded()
         
         if launchedBefore == false {
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: key)

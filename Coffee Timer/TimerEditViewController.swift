@@ -43,11 +43,6 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
-    @IBAction func nameBrandChange(sender: AnyObject) {
-        println("editing coffee name field")
-    }
-    
-    
     @IBAction func sliderValueChanged(sender: UISlider) {
         let numberOfMinutes = Int(minutesSlider.value)
         let numberOfSeconds = Int(secondsSlider.value)

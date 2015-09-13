@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B843903B1BA5BF2500D684EB /* coffeeBrands.txt in Resources */ = {isa = PBXBuildFile; fileRef = B843903A1BA5BF2500D684EB /* coffeeBrands.txt */; };
+		B843903F1BA5C8FF00D684EB /* BrandModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B843903E1BA5C8FF00D684EB /* BrandModel.swift */; };
 		B84A87BB1B92189600790F35 /* checked.png in Resources */ = {isa = PBXBuildFile; fileRef = B84A87B91B92189600790F35 /* checked.png */; };
 		B84A87BC1B92189600790F35 /* unchecked.png in Resources */ = {isa = PBXBuildFile; fileRef = B84A87BA1B92189600790F35 /* unchecked.png */; };
 		B84A87BE1B921C5300790F35 /* TimerModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84A87BD1B921C5300790F35 /* TimerModel.swift */; };
@@ -36,6 +38,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B843903A1BA5BF2500D684EB /* coffeeBrands.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = coffeeBrands.txt; sourceTree = "<group>"; };
+		B843903E1BA5C8FF00D684EB /* BrandModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BrandModel.swift; sourceTree = "<group>"; };
 		B84A87B91B92189600790F35 /* checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checked.png; sourceTree = "<group>"; };
 		B84A87BA1B92189600790F35 /* unchecked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = unchecked.png; sourceTree = "<group>"; };
 		B84A87BD1B921C5300790F35 /* TimerModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TimerModel.swift; path = "Coffee Timer/TimerModel.swift"; sourceTree = "<group>"; };
@@ -102,6 +106,7 @@
 			children = (
 				B84A87BF1B9382D400790F35 /* NFCheckboxButton.swift */,
 				B84A87BD1B921C5300790F35 /* TimerModel.swift */,
+				B843903E1BA5C8FF00D684EB /* BrandModel.swift */,
 				B8E192941B7371E90073004F /* Coffee Timer */,
 				B8E192AA1B7371E90073004F /* Coffee TimerTests */,
 				B8E192931B7371E90073004F /* Products */,
@@ -137,6 +142,7 @@
 		B8E192951B7371E90073004F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				B843903A1BA5BF2500D684EB /* coffeeBrands.txt */,
 				B8E192A01B7371E90073004F /* LaunchScreen.xib */,
 				B8E192961B7371E90073004F /* Info.plist */,
 				B890332F1B8A8EB1009D8431 /* InfoPlist.strings */,
@@ -247,6 +253,7 @@
 				B84A87BB1B92189600790F35 /* checked.png in Resources */,
 				B8E1929D1B7371E90073004F /* Main.storyboard in Resources */,
 				B890332D1B8A8EB1009D8431 /* InfoPlist.strings in Resources */,
+				B843903B1BA5BF2500D684EB /* coffeeBrands.txt in Resources */,
 				B8E192A21B7371E90073004F /* LaunchScreen.xib in Resources */,
 				B84A87BC1B92189600790F35 /* unchecked.png in Resources */,
 				B8E1929F1B7371E90073004F /* Images.xcassets in Resources */,
@@ -274,6 +281,7 @@
 				B8C0C0271B8BE6E400C9EB27 /* CoreDataStack.swift in Sources */,
 				B84A87BE1B921C5300790F35 /* TimerModel.swift in Sources */,
 				B8F0A1FD1BA2E6FA00533FBA /* ListTableViewController.swift in Sources */,
+				B843903F1BA5C8FF00D684EB /* BrandModel.swift in Sources */,
 				B8B511291B7F92C80074056A /* TimerListTableViewController.swift in Sources */,
 				B8E192981B7371E90073004F /* AppDelegate.swift in Sources */,
 			);
