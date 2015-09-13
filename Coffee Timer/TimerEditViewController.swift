@@ -13,7 +13,7 @@ import UIKit
     func timerEditViewControllerDidSave(viewController: TimerEditViewController)
 }
 
-class TimerEditViewController: UIViewController {
+class TimerEditViewController: UIViewController, UITextFieldDelegate {
     
     var creatingNewTimer = false
     var coffeeTimers: [TimerModel]!
@@ -33,7 +33,7 @@ class TimerEditViewController: UIViewController {
         timerModel.name = nameField.text
         timerModel.brand = brandField.text
         timerModel.duration = Int32(Int(minutesSlider.value) * 60 + Int(secondsSlider.value))
-        println("favorite = \(favoriteButton.selected)")
+//        println("favorite = \(favoriteButton.selected)")
         if timerTypeSegmentedControl.selectedSegmentIndex == 0 {
             timerModel.type = .Coffee
         } else { // Must be 1
@@ -43,6 +43,11 @@ class TimerEditViewController: UIViewController {
         presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    @IBAction func nameBrandChange(sender: AnyObject) {
+        println("editing coffee name field")
+    }
+    
+    
     @IBAction func sliderValueChanged(sender: UISlider) {
         let numberOfMinutes = Int(minutesSlider.value)
         let numberOfSeconds = Int(secondsSlider.value)
@@ -50,22 +55,15 @@ class TimerEditViewController: UIViewController {
     }
     
     @IBAction func tapFavoriteButton(sender: UIButton) {
-//        println("button pressed")
         sender.selected = !sender.selected
     }
     
     @IBOutlet weak var favoriteButton: UIButton!
-    
     @IBOutlet weak var nameField: UITextField!
-    
     @IBOutlet weak var brandField: UITextField!
-    
     @IBOutlet weak var minutesLabel: UILabel!
-    
     @IBOutlet weak var minutesSlider: UISlider!
-    
     @IBOutlet weak var secondsLabel: UILabel!
-    
     @IBOutlet weak var secondsSlider: UISlider!
     
     func updateLabelsWithMinutes(minutes: Int, seconds: Int) {
@@ -96,6 +94,23 @@ class TimerEditViewController: UIViewController {
         minutesSlider.value = Float(numberOfMinutes)
         secondsSlider.value = Float(numberOfSeconds)
         favoriteButton.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)
+        nameField.delegate = self
+        brandField.delegate = self
+    }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        startObservingKeyboardEvents()
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopObservingKeyboardEvents()
+    }
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
     }
 
     override func didReceiveMemoryWarning() {
@@ -103,7 +118,36 @@ class TimerEditViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    // MARK: - Keyboard observer convenience
+    
+    private func startObservingKeyboardEvents() {
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector:Selector("keyboardWillShow:"),
+            name:UIKeyboardWillShowNotification,
+            object:nil)
+        NSNotificationCenter.defaultCenter().addObserver(self,
+            selector:Selector("keyboardWillHide:"),
+            name:UIKeyboardWillHideNotification,
+            object:nil)
+    }
+    
+    private func stopObservingKeyboardEvents() {
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+    }
+    
+    func keyboardWillShow(notification: NSNotification) {
+        if let userInfo = notification.userInfo {
+            if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue().size {
+                let contentInset = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
+            }
+        }
+    }
+    
+    func keyboardWillHide(notification: NSNotification) {
+        let contentInset = UIEdgeInsetsZero;
+    }
+    
     /*
     // MARK: - Navigation
 

@@ -20,6 +20,7 @@ extension Array {
 class TimerListTableViewController: UITableViewController {
     
     var userReorderingCells = false
+    let cellIdentifier = "Cell"
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "TimerModel")
@@ -27,7 +28,6 @@ class TimerListTableViewController: UITableViewController {
             NSSortDescriptor(key: "type", ascending: true),
             NSSortDescriptor(key: "displayOrder", ascending: true)
         ]
-        
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
         controller.delegate = self
         return controller
@@ -46,7 +46,6 @@ class TimerListTableViewController: UITableViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if let cell = sender as? UITableViewCell {
             let indexPath = tableView.indexPathForCell(cell)!
-            
             let timerModel = timerModelForIndexPath(indexPath)
             
             if segue.identifier == "pushDetail" {
@@ -65,7 +64,6 @@ class TimerListTableViewController: UITableViewController {
                 let editViewController = navigationController.topViewController as! TimerEditViewController
                 
                 editViewController.creatingNewTimer = true
-                
                 editViewController.timerModel = NSEntityDescription.insertNewObjectForEntityForName("TimerModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! TimerModel
                 editViewController.delegate = self
             }
@@ -92,7 +90,7 @@ class TimerListTableViewController: UITableViewController {
         let tabBarIndex = self.navigationController?.tabBarController?.selectedIndex
         println("tabBarIndex = \(tabBarIndex)")
         navigationItem.leftBarButtonItem = editButtonItem()
-        self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -120,11 +118,20 @@ class TimerListTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("Cell", forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
         cell.detailTextLabel?.text = timerModel.brand
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
+        headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44.0
     }
 
     override func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
@@ -222,7 +229,6 @@ extension TimerListTableViewController: NSFetchedResultsControllerDelegate {
         if userReorderingCells {
             return
         }
-        
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
@@ -233,9 +239,9 @@ extension TimerListTableViewController: NSFetchedResultsControllerDelegate {
         case .Update:
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         }
+        appDelegate().saveCoreData()
     }
 }
-
 
 extension TimerListTableViewController: TimerEditViewControllerDelegate {
     func timerEditViewControllerDidCancel(viewController: TimerEditViewController) {
@@ -245,6 +251,6 @@ extension TimerListTableViewController: TimerEditViewControllerDelegate {
     }
     
     func timerEditViewControllerDidSave(viewController: TimerEditViewController) {
-        appDelegate().coreDataStack.managedObjectContext.save(nil)
+        appDelegate().saveCoreData()
     }
 }

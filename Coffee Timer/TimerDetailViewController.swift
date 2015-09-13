@@ -40,15 +40,8 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        println("in ViewDidLoad")
         title = "Timer"
-        coffeeTeaName.text = timerModel.name
-        coffeeTeaName.enabled = false
-        brandField.text = timerModel.brand
-        brandField.enabled = false
-        countdownLabel.text = timerModel.durationText
-        timerModel.addObserver(self, forKeyPath: "duration", options: .New, context: nil)
-        timerModel.addObserver(self, forKeyPath: "name", options: .New, context: nil)
-        self.favoriteButton.selected = timerModel.favorite
     }
     
     deinit {
@@ -64,9 +57,23 @@ class TimerDetailViewController: UIViewController {
         }
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        println("in ViewWillLoad")
+        coffeeTeaName.text = timerModel.name
+        coffeeTeaName.enabled = false
+        brandField.text = timerModel.brand
+        brandField.enabled = false
+        countdownLabel.text = timerModel.durationText
+        timerModel.addObserver(self, forKeyPath: "duration", options: .New, context: nil)
+        timerModel.addObserver(self, forKeyPath: "name", options: .New, context: nil)
+        self.favoriteButton.selected = timerModel.favorite
+    }
+    
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        
+        println("brand in ViewDidAppear in TimerDetailViewController is \(timerModel.brand)")
+        println("favorite is \(timerModel.favorite)")
         // Request local notifications and set up local notification
         let settings = UIUserNotificationSettings(forTypes: (.Alert | .Sound), categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
@@ -74,6 +81,7 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
+//        println("in ViewDidDisappear in TimerDetailViewController")
         stopTimer(.Cancelled)
     }
 
