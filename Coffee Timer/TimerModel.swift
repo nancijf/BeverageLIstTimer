@@ -20,6 +20,6 @@ class TimerModel: NSManagedObject {
     @NSManaged var duration: Int32
     @NSManaged var type: TimerType
     @NSManaged var displayOrder: Int32
-    @NSManaged var brand: String?
     @NSManaged var favorite: Bool
+    @NSManaged var brand: BrandModel
 }

@@ -13,5 +13,6 @@ class BrandModel: NSManagedObject {
 
     @NSManaged var name: String
     @NSManaged var favorite: Bool
+    @NSManaged var timers: [TimerModel]
 
 }

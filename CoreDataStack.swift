@@ -88,8 +88,10 @@ class CoreDataStack: Printable {
         
         if launchedBefore == false {
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: key)
+            let request = NSFetchRequest(entityName: "BrandModel")
+            let results: NSArray = managedObjectContext.executeFetchRequest(request, error: nil)!
             
-            for i in 0..<5 {
+            for i in 0..<6 {
                 let model = NSEntityDescription.insertNewObjectForEntityForName("TimerModel", inManagedObjectContext: managedObjectContext) as! TimerModel
                 
                 switch i {
@@ -97,22 +99,38 @@ class CoreDataStack: Printable {
                     model.name = NSLocalizedString("Colombian", comment: "Columbian coffee name")
                     model.duration = 240
                     model.type = .Coffee
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Starbucks'")) as! [BrandModel]).first
+                    model.brand = brand!
                 case 1:
                     model.name = NSLocalizedString("Mexican", comment: "Mexian coffee name")
                     model.duration = 200
                     model.type = .Coffee
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Capresso'")) as! [BrandModel]).first
+                    model.brand = brand!
                 case 2:
                     model.name = NSLocalizedString("Green Tea", comment: "Green tea name")
                     model.duration = 400
                     model.type = .Tea
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Dallmayr'")) as! [BrandModel]).first
+                    model.brand = brand!
                 case 3:
                     model.name = NSLocalizedString("Oolong", comment: "Oolong tea name")
                     model.duration = 400
                     model.type = .Tea
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Gevalia'")) as! [BrandModel]).first
+                    model.brand = brand!
+                case 4:
+                    model.name = NSLocalizedString("Veranda", comment: "Veranda coffee name")
+                    model.duration = 400
+                    model.type = .Coffee
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Starbucks'")) as! [BrandModel]).first
+                    model.brand = brand!
                 default: // case 4:
                     model.name = NSLocalizedString("Rooibos", comment: "Rooibos tea name")
                     model.duration = 480
                     model.type = .Tea
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Jacobs'")) as! [BrandModel]).first
+                    model.brand = brand!
                 }
                 
                 model.displayOrder = Int32(i)
