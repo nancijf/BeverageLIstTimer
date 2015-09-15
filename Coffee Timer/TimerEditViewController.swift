@@ -82,7 +82,9 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
         let numberOfMinutes = Int(timerModel.duration / 60)
         let numberOfSeconds = Int(timerModel.duration % 60)
         nameField.text = timerModel.name
-        brandField.text = timerModel.brand.name
+        if let brand = timerModel.brand as BrandModel? {
+            brandField.text = brand.name
+        }
         favoriteButton.selected = timerModel.favorite
         
         updateLabelsWithMinutes(numberOfMinutes, seconds: numberOfSeconds)
@@ -152,9 +154,12 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
     }
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
-        return false
+        if textField.tag == 1 {
+            textField.resignFirstResponder()
+            self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
+            return false
+        }
+        return true
     }
     
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {

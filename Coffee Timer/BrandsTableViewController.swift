@@ -18,7 +18,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     var delegate:BrandsTableViewControllerDelegate! = nil
     var brandSelected: BrandModel?
-    var selectedIndex: NSIndexPath?
+    var selectedIndex: NSIndexPath = NSIndexPath(forItem: 0, inSection: 0)
     
     let cellIdentifier = "brandCell"
     
@@ -44,7 +44,9 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
             NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")
         ]
         let results: NSArray = appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request, error: nil)!
-        selectedIndex = NSIndexPath(forItem: results.indexOfObject(brandSelected!), inSection: 0)
+        if brandSelected != nil {
+            selectedIndex = NSIndexPath(forItem: results.indexOfObject(brandSelected!), inSection: 0)
+        }
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -55,7 +57,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     }
     
     override func viewDidAppear(animated: Bool) {
-        tableView.scrollToRowAtIndexPath(selectedIndex!, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        tableView.scrollToRowAtIndexPath(selectedIndex, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
     }
 
     override func didReceiveMemoryWarning() {
