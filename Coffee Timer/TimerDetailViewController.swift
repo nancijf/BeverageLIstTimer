@@ -44,10 +44,10 @@ class TimerDetailViewController: UIViewController {
         title = "Timer"
     }
     
-    deinit {
-        timerModel.removeObserver(self, forKeyPath: "duration")
-        timerModel.removeObserver(self, forKeyPath: "name")
-    }
+//    deinit {
+//        timerModel.removeObserver(self, forKeyPath: "duration")
+//        timerModel.removeObserver(self, forKeyPath: "name")
+//    }
     
     override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
         if keyPath == "duration" {
@@ -77,6 +77,11 @@ class TimerDetailViewController: UIViewController {
         // Request local notifications and set up local notification
         let settings = UIUserNotificationSettings(forTypes: (.Alert | .Sound), categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
+    }
+    
+    override func viewWillDisappear(animated: Bool) {
+        timerModel.removeObserver(self, forKeyPath: "duration")
+        timerModel.removeObserver(self, forKeyPath: "name")
     }
     
     override func viewDidDisappear(animated: Bool) {

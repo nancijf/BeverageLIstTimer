@@ -17,6 +17,7 @@
 		B868C10D1B77C2AB00E37141 /* TimerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868C10C1B77C2AB00E37141 /* TimerDetailViewController.swift */; };
 		B868C1111B77DFAE00E37141 /* TimerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868C1101B77DFAE00E37141 /* TimerEditViewController.swift */; };
 		B890332D1B8A8EB1009D8431 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B890332F1B8A8EB1009D8431 /* InfoPlist.strings */; };
+		B8A6A4911BADC44E00A8A437 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A6A4901BADC44E00A8A437 /* FavoritesTableViewController.swift */; };
 		B8B511291B7F92C80074056A /* TimerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B511281B7F92C80074056A /* TimerListTableViewController.swift */; };
 		B8C0C0271B8BE6E400C9EB27 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8C0C0261B8BE6E400C9EB27 /* CoreDataStack.swift */; };
 		B8C0C02A1B8BEFD900C9EB27 /* CoffeeTimer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B8C0C0281B8BEFD900C9EB27 /* CoffeeTimer.xcdatamodeld */; };
@@ -52,6 +53,7 @@
 		B890332A1B8A68BA009D8431 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B890332E1B8A8EB1009D8431 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B89033301B8A8EB4009D8431 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		B8A6A4901BADC44E00A8A437 /* FavoritesTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesTableViewController.swift; sourceTree = "<group>"; };
 		B8B511281B7F92C80074056A /* TimerListTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerListTableViewController.swift; sourceTree = "<group>"; };
 		B8C0C0261B8BE6E400C9EB27 /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CoreDataStack.swift; path = ../CoreDataStack.swift; sourceTree = "<group>"; };
 		B8C0C0291B8BEFD900C9EB27 /* CoffeeTimer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = CoffeeTimer.xcdatamodel; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 				B8B511281B7F92C80074056A /* TimerListTableViewController.swift */,
 				B8F0A1FC1BA2E6FA00533FBA /* ListTableViewController.swift */,
 				B84390411BA60D2C00D684EB /* BrandsTableViewController.swift */,
+				B8A6A4901BADC44E00A8A437 /* FavoritesTableViewController.swift */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				B84A87C01B9382D400790F35 /* NFCheckboxButton.swift in Sources */,
 				B8C0C02A1B8BEFD900C9EB27 /* CoffeeTimer.xcdatamodeld in Sources */,
 				B868C1111B77DFAE00E37141 /* TimerEditViewController.swift in Sources */,
+				B8A6A4911BADC44E00A8A437 /* FavoritesTableViewController.swift in Sources */,
 				B868C10D1B77C2AB00E37141 /* TimerDetailViewController.swift in Sources */,
 				B8C0C0271B8BE6E400C9EB27 /* CoreDataStack.swift in Sources */,
 				B84A87BE1B921C5300790F35 /* TimerModel.swift in Sources */,
