@@ -15,7 +15,7 @@ class ListTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest(entityName: "TimerModel")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "type", ascending: true),
-            NSSortDescriptor(key: "displayOrder", ascending: true)
+            NSSortDescriptor(key: "favorite", ascending: true)
         ]
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
         controller.delegate = self

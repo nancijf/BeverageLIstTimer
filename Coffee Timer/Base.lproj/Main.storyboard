@@ -154,7 +154,13 @@
                             <outlet property="delegate" destination="rZa-KA-Uxq" id="jfQ-Q9-C4i"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="D0z-d2-rGd"/>
+                    <navigationItem key="navigationItem" id="D0z-d2-rGd">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="qMF-KX-zKC">
+                            <connections>
+                                <action selector="showSearchView:" destination="rZa-KA-Uxq" id="RUV-jj-E2o"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGN-d9-hrR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -362,6 +368,15 @@
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q5b-2M-Ghe" id="kQR-iJ-NCM">
                                     <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                     <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Detail" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="eeq-E3-OxH">
+                                            <rect key="frame" x="234" y="15" width="44" height="21"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
                                 </tableViewCellContentView>
                             </tableViewCell>
                         </prototypes>

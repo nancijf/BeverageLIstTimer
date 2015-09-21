@@ -98,7 +98,9 @@ class TimerListTableViewController: UITableViewController {
             tableView.reloadData()
         }
     }
-    
+
+    // MARK: - Table view data source
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // Return the number of sections we're displaying
         return count(fetchedResultsController.sections ?? [])
@@ -174,9 +176,9 @@ class TimerListTableViewController: UITableViewController {
             
             let sectionInfo = fetchedResultsController.sections?[TableSection.Coffee.rawValue] as? NSFetchedResultsSectionInfo
             
-            let numberOfCoffeTimers = sectionInfo?.numberOfObjects ?? 0
+            let numberOfCoffeeTimers = sectionInfo?.numberOfObjects ?? 0
             
-            return NSIndexPath(forItem: numberOfCoffeTimers - 1, inSection: 0)
+            return NSIndexPath(forItem: numberOfCoffeeTimers - 1, inSection: 0)
         } else { // Must be TableSection.Tea
             // This is coming from the tea section, so return
             // the first index path in that section.

@@ -17,22 +17,44 @@ class FavoritesTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest(entityName: "TimerModel")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "type", ascending: true),
-            NSSortDescriptor(key: "favorite", ascending: true)
+            NSSortDescriptor(key: "displayOrder", ascending: true)
         ]
+        fetchRequest.predicate = NSPredicate(format: "favorite == true")
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
 //        controller.delegate = self
+        
         return controller
-        }()
+    }()
+    
+    lazy var noFavoritesLabel: UILabel? = {
+        let noFavoritesView = UILabel(frame: CGRectZero)
+        let noFavoritesMessage: String = "You do not have any favorites selected."
+        noFavoritesView.text = noFavoritesMessage
+        noFavoritesView.font = UIFont.boldSystemFontOfSize(15.0)
+        noFavoritesView.textColor = UIColor.lightTextColor()
+        noFavoritesView.textAlignment = NSTextAlignment.Center
+        
+        return noFavoritesView
+    }()
 
+    enum TableSection: Int {
+        case Coffee = 0
+        case Tea
+        case NumberOfSections
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "My Favorites"
+        self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
+    }
+    
+    override func viewWillAppear(animated: Bool) {
         let error = NSErrorPointer()
         if !fetchedResultsController.performFetch(error) {
             println("Error fetching: \(error)")
         }
-        title = "My Favorites"
-//        navigationItem.leftBarButtonItem = editButtonItem()
-        self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
+        tableView.reloadData()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,11 +65,31 @@ class FavoritesTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return count(fetchedResultsController.sections ?? [])
+        let numberOfSections = count(fetchedResultsController.sections ?? [])
+        if numberOfSections == 0 {
+            noFavoritesLabel!.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)
+            
+            self.tableView.backgroundView = noFavoritesLabel!
+            self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
+        }
+        else {
+            self.tableView.backgroundView = nil
+        }
+        
+        return numberOfSections
+    }
+    
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == TableSection.Coffee.rawValue {
+            return "Coffee"
+        } else {
+            return "Teas"
+        }
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo
+        
         return sectionInfo?.numberOfObjects ?? 0
     }
     
@@ -55,7 +97,20 @@ class FavoritesTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
+        if let brand = timerModel.brand as BrandModel? {
+            cell.detailTextLabel?.text = brand.name
+        }
+        
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
+        headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44.0
     }
     
     func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel {
@@ -74,3 +129,4 @@ class FavoritesTableViewController: UITableViewController {
     */
 
 }
+
