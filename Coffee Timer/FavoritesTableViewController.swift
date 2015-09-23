@@ -21,7 +21,7 @@ class FavoritesTableViewController: UITableViewController {
         ]
         fetchRequest.predicate = NSPredicate(format: "favorite == true")
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
-//        controller.delegate = self
+        controller.delegate = self
         
         return controller
     }()
@@ -50,6 +50,7 @@ class FavoritesTableViewController: UITableViewController {
     }
     
     override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
         let error = NSErrorPointer()
         if !fetchedResultsController.performFetch(error) {
             println("Error fetching: \(error)")
@@ -104,6 +105,12 @@ class FavoritesTableViewController: UITableViewController {
         return cell
     }
     
+//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+//        if tableView.editing {
+//            let cell = tableView.cellForRowAtIndexPath(indexPath)
+//        }
+//    }
+    
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
         headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
@@ -127,6 +134,14 @@ class FavoritesTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
-
 }
 
+extension FavoritesTableViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
+    }
+}

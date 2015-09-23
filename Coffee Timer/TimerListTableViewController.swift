@@ -125,6 +125,7 @@ class TimerListTableViewController: UITableViewController {
         if let brand = timerModel.brand as BrandModel? {
             cell.detailTextLabel?.text = brand.name
         }
+        
         return cell
     }
     
