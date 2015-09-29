@@ -107,9 +107,15 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "BrandSelection" {
-            let viewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
-            viewController.delegate = self
-            viewController.brandSelected = sender as? BrandModel
+            let brandsTableViewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
+//            brandsTableViewController.delegate = self
+            brandsTableViewController.brandCompletion = {(brand: BrandModel) -> () in self
+                println("brand: \(brand)")
+                self.timerModel.brand = brand
+                self.brandField.text = brand.name
+            }
+            
+            brandsTableViewController.brandSelected = sender as? BrandModel
         }
     }
     
@@ -162,6 +168,12 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
         return true
     }
     
+}
+
+/// MARK: - BrandsTableViewControllerDelegate
+
+extension TimerEditViewController: BrandsTableViewControllerDelegate
+{
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
         println("brand: \(brand)")
         timerModel.brand = brand

@@ -10,19 +10,20 @@ import UIKit
 import Foundation
 import CoreData
 
-protocol BrandsTableViewControllerDelegate {
+@objc protocol BrandsTableViewControllerDelegate {
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel)
 }
 
 class BrandsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate {
     
-    var delegate:BrandsTableViewControllerDelegate! = nil
+    weak var delegate: BrandsTableViewControllerDelegate?
     var brandSelected: BrandModel?
     var selectedIndex: NSIndexPath = NSIndexPath(forItem: 0, inSection: 0)
     var savedBackButton: UIBarButtonItem?
     var searchButton: UIBarButtonItem?
     var searchActive: Bool = false
     var filtered:[String] = []
+    var brandCompletion: ((brand: BrandModel) -> ())?
     
     lazy var searchBar:UISearchBar = {
         let searchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
@@ -149,7 +150,8 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     func brandsViewControllerDidFinishSelectingBrand(brand: BrandModel)
     {
-        self.delegate!.brandsTableViewControllerDidFinishSelectingBrand(self, brand: brand)
+//        delegate?.brandsTableViewControllerDidFinishSelectingBrand(self, brand: brand)
+        brandCompletion!(brand: brand)
     }
 
     /// MARK: - Search Bar Delegate 

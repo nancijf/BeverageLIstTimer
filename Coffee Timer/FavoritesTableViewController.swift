@@ -51,11 +51,16 @@ class FavoritesTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        fetchedResultsController.delegate = self
         let error = NSErrorPointer()
         if !fetchedResultsController.performFetch(error) {
             println("Error fetching: \(error)")
         }
         tableView.reloadData()
+    }
+    
+    override func viewDidDisappear(animated: Bool) {
+        fetchedResultsController.delegate = nil
     }
 
     override func didReceiveMemoryWarning() {

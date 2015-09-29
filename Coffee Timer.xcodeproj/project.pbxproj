@@ -16,6 +16,7 @@
 		B84A87C01B9382D400790F35 /* NFCheckboxButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B84A87BF1B9382D400790F35 /* NFCheckboxButton.swift */; };
 		B868C10D1B77C2AB00E37141 /* TimerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868C10C1B77C2AB00E37141 /* TimerDetailViewController.swift */; };
 		B868C1111B77DFAE00E37141 /* TimerEditViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868C1101B77DFAE00E37141 /* TimerEditViewController.swift */; };
+		B88586891BB6037A00D37A73 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B88586881BB6037A00D37A73 /* MapKit.framework */; };
 		B890332D1B8A8EB1009D8431 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B890332F1B8A8EB1009D8431 /* InfoPlist.strings */; };
 		B8A6A4911BADC44E00A8A437 /* FavoritesTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8A6A4901BADC44E00A8A437 /* FavoritesTableViewController.swift */; };
 		B8B511291B7F92C80074056A /* TimerListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8B511281B7F92C80074056A /* TimerListTableViewController.swift */; };
@@ -49,6 +50,7 @@
 		B84A87BF1B9382D400790F35 /* NFCheckboxButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NFCheckboxButton.swift; sourceTree = "<group>"; };
 		B868C10C1B77C2AB00E37141 /* TimerDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerDetailViewController.swift; sourceTree = "<group>"; };
 		B868C1101B77DFAE00E37141 /* TimerEditViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TimerEditViewController.swift; sourceTree = "<group>"; };
+		B88586881BB6037A00D37A73 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		B89033291B8A68BA009D8431 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
 		B890332A1B8A68BA009D8431 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		B890332E1B8A8EB1009D8431 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -74,6 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B88586891BB6037A00D37A73 /* MapKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -110,6 +113,7 @@
 		B8E192891B7371E90073004F = {
 			isa = PBXGroup;
 			children = (
+				B88586881BB6037A00D37A73 /* MapKit.framework */,
 				B84A87BF1B9382D400790F35 /* NFCheckboxButton.swift */,
 				B84A87BD1B921C5300790F35 /* TimerModel.swift */,
 				B843903E1BA5C8FF00D684EB /* BrandModel.swift */,
@@ -224,6 +228,11 @@
 					B8E192911B7371E90073004F = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = KD7N7R2FNY;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					B8E192A61B7371E90073004F = {
 						CreatedOnToolsVersion = 6.4;

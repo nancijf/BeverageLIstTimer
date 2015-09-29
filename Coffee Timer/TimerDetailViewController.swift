@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import CoreData
+
 
 class TimerDetailViewController: UIViewController {
     
@@ -36,6 +38,12 @@ class TimerDetailViewController: UIViewController {
         } else {
             return 0
         }
+    }
+    
+    @IBAction func tapFavoriteButton(sender: UIButton) {
+        sender.selected = !sender.selected
+        timerModel.favorite = favoriteButton.selected
+        appDelegate().saveCoreData()
     }
     
     override func viewDidLoad() {

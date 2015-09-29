@@ -9,7 +9,6 @@
 import UIKit
 import CoreData
 
-
 extension Array {
         mutating func moveFrom(source: Int, toDestination destination: Int) {
             let object = removeAtIndex(source)
