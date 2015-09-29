@@ -21,5 +21,6 @@ class TimerModel: NSManagedObject {
     @NSManaged var type: TimerType
     @NSManaged var displayOrder: Int32
     @NSManaged var favorite: Bool
+    @NSManaged var selected: Bool
     @NSManaged var brand: BrandModel
 }
