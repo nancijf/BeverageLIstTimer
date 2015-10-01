@@ -57,15 +57,13 @@ class TimerListTableViewController: UITableViewController {
                 editViewController.timerModel = timerModel
                 editViewController.delegate = self
             }
-        } else if let addButton = sender as? UIBarButtonItem {
-            if segue.identifier == "newTimer" {
+        } else if segue.identifier == "newTimer" {
                 let navigationController = segue.destinationViewController as! UINavigationController
                 let editViewController = navigationController.topViewController as! TimerEditViewController
                 
                 editViewController.creatingNewTimer = true
                 editViewController.timerModel = NSEntityDescription.insertNewObjectForEntityForName("TimerModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! TimerModel
                 editViewController.delegate = self
-            }
         }
     }
     
@@ -81,12 +79,15 @@ class TimerListTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         let error = NSErrorPointer()
-        if !fetchedResultsController.performFetch(error) {
-            println("Error fetching: \(error)")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Error fetching: \(error)")
         }
         title = "Drinks"
         let tabBarIndex = self.navigationController?.tabBarController?.selectedIndex
-        println("tabBarIndex = \(tabBarIndex)")
+        print("tabBarIndex = \(tabBarIndex)")
         navigationItem.leftBarButtonItem = editButtonItem()
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0)
     }
@@ -102,7 +103,7 @@ class TimerListTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // Return the number of sections we're displaying
-        return count(fetchedResultsController.sections ?? [])
+        return (fetchedResultsController.sections ?? []).count
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -113,12 +114,12 @@ class TimerListTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo
-        return sectionInfo?.numberOfObjects ?? 0
+        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
+        return sectionInfo.numberOfObjects ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath)
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
         if let brand = timerModel.brand as BrandModel? {
@@ -148,7 +149,7 @@ class TimerListTableViewController: UITableViewController {
         return true
     }
     
-    override func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject) -> Bool {
+    override func tableView(tableView: UITableView, canPerformAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) -> Bool {
         if action == "copy:" {
             return true
         }
@@ -156,7 +157,7 @@ class TimerListTableViewController: UITableViewController {
         return false
     }
 
-    override func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject!) {
+    override func tableView(tableView: UITableView, performAction action: Selector, forRowAtIndexPath indexPath: NSIndexPath, withSender sender: AnyObject?) {
         let timerModel = timerModelForIndexPath(indexPath)
         let pasteboard = UIPasteboard.generalPasteboard()
         pasteboard.string = timerModel.name
@@ -174,9 +175,9 @@ class TimerListTableViewController: UITableViewController {
             // This is coming from the coffee section, so return
             // the last index path in that section.
             
-            let sectionInfo = fetchedResultsController.sections?[TableSection.Coffee.rawValue] as? NSFetchedResultsSectionInfo
+            let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[TableSection.Coffee.rawValue])!
             
-            let numberOfCoffeeTimers = sectionInfo?.numberOfObjects ?? 0
+            let numberOfCoffeeTimers = sectionInfo.numberOfObjects ?? 0
             
             return NSIndexPath(forItem: numberOfCoffeeTimers - 1, inSection: 0)
         } else { // Must be TableSection.Tea
@@ -191,8 +192,9 @@ class TimerListTableViewController: UITableViewController {
         userReorderingCells = true
         
         // Grab the section and the TimerModels in the section
-        let sectionInfo = fetchedResultsController.sections?[sourceIndexPath.section] as? NSFetchedResultsSectionInfo
-        var objectsInSection = sectionInfo?.objects ?? []
+        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[sourceIndexPath.section])!
+        
+        var objectsInSection = sectionInfo.objects ?? []
         
         // Rearrange the order to match the user's actions
         // Note: this doesn't move anything in Core Data, just our objectsInSection array
@@ -200,13 +202,16 @@ class TimerListTableViewController: UITableViewController {
         
         // The models are now in the correct order.
         // Update their displayOrder to match the new order.
-        for i in 0..<count(objectsInSection) {
+        for i in 0..<objectsInSection.count {
             let model = objectsInSection[i] as? TimerModel
             model?.displayOrder = Int32(i)
         }
         
         userReorderingCells = false
-        appDelegate().coreDataStack.managedObjectContext.save(nil)
+        do {
+            try appDelegate().coreDataStack.managedObjectContext.save()
+        } catch _ {
+        }
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

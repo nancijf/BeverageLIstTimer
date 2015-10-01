@@ -13,7 +13,7 @@ import UIKit
     func timerEditViewControllerDidSave(viewController: TimerEditViewController)
 }
 
-class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTableViewControllerDelegate {
+class TimerEditViewController: UIViewController, UITextFieldDelegate {
     
     var creatingNewTimer = false
     var coffeeTimers: [TimerModel]!
@@ -31,7 +31,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         timerModel.favorite = favoriteButton.selected
         timerModel.name = nameField.text
-        timerModel.brand.name = brandField.text
+        timerModel.brand.name = brandField.text!
         timerModel.duration = Int32(Int(minutesSlider.value) * 60 + Int(secondsSlider.value))
 //        println("favorite = \(favoriteButton.selected)")
         if timerTypeSegmentedControl.selectedSegmentIndex == 0 {
@@ -68,8 +68,8 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
             case let pluralValue: return "\(pluralValue) \(plural)"
             }
         }
-        minutesLabel.text = pluralize(minutes, "minute", "minutes")
-        secondsLabel.text = pluralize(seconds, "second", "seconds")
+        minutesLabel.text = pluralize(minutes, singular: "minute", plural: "minutes")
+        secondsLabel.text = pluralize(seconds, singular: "second", plural: "seconds")
     }
     
     override func viewDidLoad() {
@@ -110,7 +110,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
             let brandsTableViewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
 //            brandsTableViewController.delegate = self
             brandsTableViewController.brandCompletion = {(brand: BrandModel) -> () in self
-                println("brand: \(brand)")
+                print("brand: \(brand)")
                 self.timerModel.brand = brand
                 self.brandField.text = brand.name
             }
@@ -149,7 +149,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
     
     func keyboardWillShow(notification: NSNotification) {
         if let userInfo = notification.userInfo {
-            if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue().size {
+            if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size {
                 let contentInset = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
             }
         }
@@ -175,7 +175,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
 extension TimerEditViewController: BrandsTableViewControllerDelegate
 {
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
-        println("brand: \(brand)")
+        print("brand: \(brand)")
         timerModel.brand = brand
         brandField.text = brand.name
     }

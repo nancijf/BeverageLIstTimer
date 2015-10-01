@@ -27,21 +27,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func saveCoreData() {
         let error = NSErrorPointer()
-        if !coreDataStack.managedObjectContext.save(error) {
-            println("Error saving context: \(error)")
+        do {
+            try coreDataStack.managedObjectContext.save()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Error saving context: \(error)")
         }
     }
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        println("Application has launched.")
+        print("Application has launched.")
         coreDataStack.loadDefaultDataIfFirstLaunch()
-        println(coreDataStack)
+        print(coreDataStack)
         window?.tintColor = UIColor(red:0.95, green:0.53, blue:0.27, alpha:1)
         return true
     }
     
     func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
-        println("Application received local notification.")
+        print("Application received local notification.")
         let alertController = UIAlertController(title: notification.alertTitle, message: notification.alertBody, preferredStyle: .Alert)
         let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
         alertController.addAction(okAction)
@@ -49,24 +52,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationWillResignActive(application: UIApplication) {
-        println("Application has resigned active.")
+        print("Application has resigned active.")
         self.saveCoreData()
     }
 
     func applicationDidEnterBackground(application: UIApplication) {
-        println("Application has entered background.")
+        print("Application has entered background.")
     }
 
     func applicationWillEnterForeground(application: UIApplication) {
-        println("Application has entered foreground.")
+        print("Application has entered foreground.")
     }
 
     func applicationDidBecomeActive(application: UIApplication) {
-        println("Application has become active.")
+        print("Application has become active.")
     }
 
     func applicationWillTerminate(application: UIApplication) {
-        println("Application will terminate.")
+        print("Application will terminate.")
     }
 
 

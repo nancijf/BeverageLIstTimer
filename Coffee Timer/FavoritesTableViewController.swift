@@ -53,8 +53,11 @@ class FavoritesTableViewController: UITableViewController {
         super.viewWillAppear(animated)
         fetchedResultsController.delegate = self
         let error = NSErrorPointer()
-        if !fetchedResultsController.performFetch(error) {
-            println("Error fetching: \(error)")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Error fetching: \(error)")
         }
         tableView.reloadData()
     }
@@ -71,7 +74,7 @@ class FavoritesTableViewController: UITableViewController {
     // MARK: - Table view data source
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        let numberOfSections = count(fetchedResultsController.sections ?? [])
+        let numberOfSections = (fetchedResultsController.sections ?? []).count
         if numberOfSections == 0 {
             noFavoritesLabel!.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)
             
@@ -94,13 +97,13 @@ class FavoritesTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo
+        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
         
-        return sectionInfo?.numberOfObjects ?? 0
+        return sectionInfo.numberOfObjects ?? 0
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) 
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
         if let brand = timerModel.brand as BrandModel? {

@@ -9,7 +9,7 @@
 import Foundation
 import CoreData
 
-class CoreDataStack: Printable {
+class CoreDataStack: CustomStringConvertible {
     
     var modelName : String
     var storeName : String
@@ -32,12 +32,16 @@ class CoreDataStack: Printable {
         self.storeURL = self.applicationDocumentsDirectory().URLByAppendingPathComponent("\(self.storeName).sqlite")
         
         let errorPointer = NSErrorPointer()
-        if coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
-            configuration: nil,
-            URL: self.storeURL,
-            options: nil,
-            error: errorPointer) == nil {
-            println("Unresolved error adding persistent store: \(errorPointer.memory)")
+        do {
+            try coordinator.addPersistentStoreWithType(NSSQLiteStoreType,
+                        configuration: nil,
+                        URL: self.storeURL,
+                        options: nil)
+        } catch var error as NSError {
+            errorPointer.memory = error
+            print("Unresolved error adding persistent store: \(errorPointer.memory)")
+        } catch {
+            fatalError()
         }
         
         return coordinator
@@ -60,7 +64,7 @@ class CoreDataStack: Printable {
 
     func loadBrandsFromTextFile(name: String) -> [String] {
         let filePath = NSBundle.mainBundle().pathForResource(name, ofType: "txt")
-        let fileContents = String(contentsOfFile: filePath!, encoding: NSUTF8StringEncoding, error: nil)
+        let fileContents = try? String(contentsOfFile: filePath!, encoding: NSUTF8StringEncoding)
         let lines : [String] = fileContents!.componentsSeparatedByString("\n")
         
         return lines
@@ -68,7 +72,7 @@ class CoreDataStack: Printable {
     
     func loadBrandDataIfNeeded() {
         let request = NSFetchRequest(entityName: "BrandModel")
-        let results = managedObjectContext.executeFetchRequest(request, error: nil)
+        let results = try? managedObjectContext.executeFetchRequest(request)
         let brandCount = results?.count
         if brandCount == 0 {
             let coffeeBrands = loadBrandsFromTextFile("coffeeBrands")
@@ -89,7 +93,7 @@ class CoreDataStack: Printable {
         if launchedBefore == false {
             NSUserDefaults.standardUserDefaults().setBool(true, forKey: key)
             let request = NSFetchRequest(entityName: "BrandModel")
-            let results: NSArray = managedObjectContext.executeFetchRequest(request, error: nil)!
+            let results: NSArray = try! managedObjectContext.executeFetchRequest(request)
             
             for i in 0..<6 {
                 let model = NSEntityDescription.insertNewObjectForEntityForName("TimerModel", inManagedObjectContext: managedObjectContext) as! TimerModel
@@ -140,7 +144,7 @@ class CoreDataStack: Printable {
     }
     
     private func applicationDocumentsDirectory() -> NSURL {
-        return NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).first as! NSURL
+        return NSFileManager.defaultManager().URLsForDirectory(NSSearchPathDirectory.DocumentDirectory, inDomains: NSSearchPathDomainMask.UserDomainMask).first!
     }
 
 }

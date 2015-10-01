@@ -48,7 +48,7 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("in ViewDidLoad")
+        print("in ViewDidLoad")
         title = "Timer"
     }
     
@@ -57,7 +57,7 @@ class TimerDetailViewController: UIViewController {
 //        timerModel.removeObserver(self, forKeyPath: "name")
 //    }
     
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if keyPath == "duration" {
             countdownLabel.text = timerModel.durationText
         } else if keyPath == "name" {
@@ -67,7 +67,7 @@ class TimerDetailViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        println("in ViewWillLoad")
+        print("in ViewWillLoad")
         coffeeTeaName.text = timerModel.name
         coffeeTeaName.enabled = false
         brandField.text = timerModel.brand.name
@@ -80,10 +80,10 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        println("brand in ViewDidAppear in TimerDetailViewController is \(timerModel.brand)")
-        println("favorite is \(timerModel.favorite)")
+        print("brand in ViewDidAppear in TimerDetailViewController is \(timerModel.brand)")
+        print("favorite is \(timerModel.favorite)")
         // Request local notifications and set up local notification
-        let settings = UIUserNotificationSettings(forTypes: (.Alert | .Sound), categories: nil)
+        let settings = UIUserNotificationSettings(forTypes: ([.Alert, .Sound]), categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
     }
     
