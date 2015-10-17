@@ -17,7 +17,7 @@ class FavoritesTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest(entityName: "TimerModel")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "type", ascending: true),
-            NSSortDescriptor(key: "displayOrder", ascending: true)
+            NSSortDescriptor(key: "name", ascending: true)
         ]
         fetchRequest.predicate = NSPredicate(format: "favorite == true")
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
@@ -62,6 +62,20 @@ class FavoritesTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func viewDidAppear(animated: Bool) {
+        let numberOfSections = (fetchedResultsController.sections ?? []).count
+        if numberOfSections == 0 {
+            let alert = UIAlertController(title: "Alert", message: "You don't have any favorites listed.", preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+            presentViewController(alert, animated: true, completion: { () -> Void in
+                let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(2 * Double(NSEC_PER_SEC)))
+                dispatch_after(delayTime, dispatch_get_main_queue()) {
+                    alert.dismissViewControllerAnimated(true, completion: nil)
+                }
+            })
+        }
+    }
+    
     override func viewDidDisappear(animated: Bool) {
         fetchedResultsController.delegate = nil
     }
@@ -75,15 +89,7 @@ class FavoritesTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         let numberOfSections = (fetchedResultsController.sections ?? []).count
-        if numberOfSections == 0 {
-            noFavoritesLabel!.frame = CGRectMake(0, 0, self.view.bounds.size.width, self.view.bounds.size.height)
-            
-            self.tableView.backgroundView = noFavoritesLabel!
-            self.tableView.separatorStyle = UITableViewCellSeparatorStyle.None
-        }
-        else {
-            self.tableView.backgroundView = nil
-        }
+        self.tableView.backgroundView = nil
         
         return numberOfSections
     }
@@ -113,12 +119,6 @@ class FavoritesTableViewController: UITableViewController {
         return cell
     }
     
-//    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-//        if tableView.editing {
-//            let cell = tableView.cellForRowAtIndexPath(indexPath)
-//        }
-//    }
-    
     override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
         headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
@@ -131,7 +131,6 @@ class FavoritesTableViewController: UITableViewController {
     func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel {
         return fetchedResultsController.objectAtIndexPath(indexPath) as! TimerModel
     }
-
     
     /*
     // MARK: - Navigation

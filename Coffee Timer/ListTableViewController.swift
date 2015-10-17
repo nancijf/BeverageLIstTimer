@@ -15,7 +15,7 @@ class ListTableViewController: UITableViewController {
         let fetchRequest = NSFetchRequest(entityName: "TimerModel")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "type", ascending: true),
-            NSSortDescriptor(key: "favorite", ascending: true)
+            NSSortDescriptor(key: "name", ascending: true)
         ]
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
         controller.delegate = self
@@ -42,7 +42,6 @@ class ListTableViewController: UITableViewController {
             print("Error fetching: \(error)")
         }
         title = "Shopping List"
-//        navigationItem.leftBarButtonItem = editButtonItem()
         self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
     }
 
@@ -87,6 +86,15 @@ class ListTableViewController: UITableViewController {
         }
 
         return cell
+    }
+    
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
+        headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
+    }
+    
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 44.0
     }
     
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)

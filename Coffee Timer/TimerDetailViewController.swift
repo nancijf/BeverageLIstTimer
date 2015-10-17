@@ -21,9 +21,10 @@ class TimerDetailViewController: UIViewController {
     @IBOutlet weak var countdownLabel: UILabel!
     @IBOutlet weak var startStopButton: UIButton!
     @IBOutlet weak var favoriteButton: NFCheckboxButton!
-    @IBOutlet weak var brandField: UITextField!
-    @IBOutlet weak var coffeeTeaName: UITextField!
     @IBOutlet weak var resetTimer: UIButton!
+    @IBOutlet weak var coffeeTeaName: UILabel!
+    @IBOutlet weak var brandField: UILabel!
+    
     
     var timerModel: TimerModel!
     weak var timer: NSTimer?
@@ -48,7 +49,7 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("in ViewDidLoad")
+//        print("in ViewDidLoad")
         title = "Timer"
     }
     
@@ -67,7 +68,6 @@ class TimerDetailViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        print("in ViewWillLoad")
         coffeeTeaName.text = timerModel.name
         coffeeTeaName.enabled = false
         brandField.text = timerModel.brand.name
@@ -80,8 +80,6 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        print("brand in ViewDidAppear in TimerDetailViewController is \(timerModel.brand)")
-        print("favorite is \(timerModel.favorite)")
         // Request local notifications and set up local notification
         let settings = UIUserNotificationSettings(forTypes: ([.Alert, .Sound]), categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)

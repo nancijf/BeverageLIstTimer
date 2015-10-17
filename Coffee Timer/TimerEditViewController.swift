@@ -110,7 +110,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
             let brandsTableViewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
 //            brandsTableViewController.delegate = self
             brandsTableViewController.brandCompletion = {(brand: BrandModel) -> () in self
-                print("brand: \(brand)")
+//                print("brand: \(brand)")
                 self.timerModel.brand = brand
                 self.brandField.text = brand.name
             }
@@ -175,7 +175,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
 extension TimerEditViewController: BrandsTableViewControllerDelegate
 {
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
-        print("brand: \(brand)")
+//        print("brand: \(brand)")
         timerModel.brand = brand
         brandField.text = brand.name
     }

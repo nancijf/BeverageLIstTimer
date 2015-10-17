@@ -39,6 +39,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: searchBar)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "hideSearchView:"), animated: true)
         searchBar.placeholder = "Brand Name"
+        searchBar.becomeFirstResponder()
         searchActive = true
     }
     
@@ -190,7 +191,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         }
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
         tableView.reloadData()
-        print("search results is \(sectionInfo.numberOfObjects)")
+//        print("search results is \(sectionInfo.numberOfObjects)")
     }
 
 }
