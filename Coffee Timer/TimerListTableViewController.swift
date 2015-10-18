@@ -158,10 +158,8 @@ class TimerListTableViewController: UITableViewController {
     {
         if section < fetchedResultsController.sections?.count {
             let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
-            print("== in: \(__FUNCTION__) - \(section) - \(sectionInfo.numberOfObjects)")
             return sectionInfo.numberOfObjects > 0 ? 44 : 0
         }
-        print("== in: \(__FUNCTION__) - \(section)")
         return 0
     }
 
