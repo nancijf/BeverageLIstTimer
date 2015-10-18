@@ -9,7 +9,8 @@
 import UIKit
 import CoreData
 
-class FavoritesTableViewController: UITableViewController {
+class FavoritesTableViewController: UITableViewController
+{
     
     var cellIdentifier = "FavoriteCell"
     
@@ -37,19 +38,22 @@ class FavoritesTableViewController: UITableViewController {
         return noFavoritesView
     }()
 
-    enum TableSection: Int {
+    enum TableSection: Int
+    {
         case Coffee = 0
         case Tea
         case NumberOfSections
     }
     
-    override func viewDidLoad() {
+    override func viewDidLoad()
+    {
         super.viewDidLoad()
         title = "My Favorites"
-        self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0)
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(animated: Bool)
+    {
         super.viewWillAppear(animated)
         fetchedResultsController.delegate = self
         let error = NSErrorPointer()
@@ -62,7 +66,8 @@ class FavoritesTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(animated: Bool)
+    {
         let numberOfSections = (fetchedResultsController.sections ?? []).count
         if numberOfSections == 0 {
             let alert = UIAlertController(title: "Alert", message: "You don't have any favorites listed.", preferredStyle: UIAlertControllerStyle.Alert)
@@ -76,25 +81,30 @@ class FavoritesTableViewController: UITableViewController {
         }
     }
     
-    override func viewDidDisappear(animated: Bool) {
+    override func viewDidDisappear(animated: Bool)
+    {
         fetchedResultsController.delegate = nil
     }
 
-    override func didReceiveMemoryWarning() {
+    override func didReceiveMemoryWarning()
+    {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    {
         let numberOfSections = (fetchedResultsController.sections ?? []).count
         self.tableView.backgroundView = nil
         
         return numberOfSections
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
+    {
+        print("section header = \(TableSection.Coffee.rawValue)")
         if section == TableSection.Coffee.rawValue {
             return "Coffee"
         } else {
@@ -102,13 +112,15 @@ class FavoritesTableViewController: UITableViewController {
         }
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    {
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
         
         return sectionInfo.numberOfObjects ?? 0
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) 
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
@@ -119,16 +131,19 @@ class FavoritesTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
+    {
         let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
         headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat
+    {
         return 44.0
     }
     
-    func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel {
+    func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel
+    {
         return fetchedResultsController.objectAtIndexPath(indexPath) as! TimerModel
     }
     
@@ -143,12 +158,15 @@ class FavoritesTableViewController: UITableViewController {
     */
 }
 
-extension FavoritesTableViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+extension FavoritesTableViewController: NSFetchedResultsControllerDelegate
+{
+    func controllerWillChangeContent(controller: NSFetchedResultsController)
+    {
         tableView.beginUpdates()
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(controller: NSFetchedResultsController)
+    {
         tableView.endUpdates()
     }
 }

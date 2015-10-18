@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 func appDelegate() -> AppDelegate {
-    return UIApplication.sharedApplication().delegate as! AppDelegate
+    return UIApplication.sharedApplication().delegate as! AppDelegate            
 }
 
 @UIApplicationMain

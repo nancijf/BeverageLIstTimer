@@ -33,7 +33,6 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         timerModel.name = nameField.text
         timerModel.brand.name = brandField.text!
         timerModel.duration = Int32(Int(minutesSlider.value) * 60 + Int(secondsSlider.value))
-//        println("favorite = \(favoriteButton.selected)")
         if timerTypeSegmentedControl.selectedSegmentIndex == 0 {
             timerModel.type = .Coffee
         } else { // Must be 1
@@ -108,9 +107,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "BrandSelection" {
             let brandsTableViewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
-//            brandsTableViewController.delegate = self
             brandsTableViewController.brandCompletion = {(brand: BrandModel) -> () in self
-//                print("brand: \(brand)")
                 self.timerModel.brand = brand
                 self.brandField.text = brand.name
             }
@@ -175,7 +172,6 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
 extension TimerEditViewController: BrandsTableViewControllerDelegate
 {
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
-//        print("brand: \(brand)")
         timerModel.brand = brand
         brandField.text = brand.name
     }

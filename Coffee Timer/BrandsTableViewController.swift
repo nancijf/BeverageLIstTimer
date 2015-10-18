@@ -10,11 +10,13 @@ import UIKit
 import Foundation
 import CoreData
 
-@objc protocol BrandsTableViewControllerDelegate {
+@objc protocol BrandsTableViewControllerDelegate
+{
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel)
 }
 
-class BrandsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate {
+class BrandsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate
+{
     
     weak var delegate: BrandsTableViewControllerDelegate?
     var brandSelected: BrandModel?
@@ -25,7 +27,8 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     var filtered:[String] = []
     var brandCompletion: ((brand: BrandModel) -> ())?
     
-    lazy var searchBar:UISearchBar = {
+    lazy var searchBar:UISearchBar =
+    {
         let searchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
         return searchBar
     }()
@@ -157,25 +160,28 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     func brandsViewControllerDidFinishSelectingBrand(brand: BrandModel)
     {
-//        delegate?.brandsTableViewControllerDidFinishSelectingBrand(self, brand: brand)
         brandCompletion!(brand: brand)
     }
 
     /// MARK: - Search Bar Delegate 
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar)
+    {
         searchActive = true;
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(searchBar: UISearchBar)
+    {
         searchActive = false;
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(searchBar: UISearchBar)
+    {
         searchActive = false;
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(searchBar: UISearchBar)
+    {
         searchActive = false;
     }
     
@@ -191,7 +197,6 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         }
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
         tableView.reloadData()
-//        print("search results is \(sectionInfo.numberOfObjects)")
     }
 
 }

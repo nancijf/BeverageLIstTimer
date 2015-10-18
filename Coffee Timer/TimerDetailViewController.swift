@@ -25,7 +25,6 @@ class TimerDetailViewController: UIViewController {
     @IBOutlet weak var coffeeTeaName: UILabel!
     @IBOutlet weak var brandField: UILabel!
     
-    
     var timerModel: TimerModel!
     weak var timer: NSTimer?
     var pauseTime: NSInteger = 0
@@ -49,14 +48,8 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        print("in ViewDidLoad")
         title = "Timer"
     }
-    
-//    deinit {
-//        timerModel.removeObserver(self, forKeyPath: "duration")
-//        timerModel.removeObserver(self, forKeyPath: "name")
-//    }
     
     override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if keyPath == "duration" {
@@ -92,7 +85,6 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-//        println("in ViewDidDisappear in TimerDetailViewController")
         stopTimer(.Cancelled)
     }
 
@@ -156,7 +148,6 @@ class TimerDetailViewController: UIViewController {
     }
     
     @IBAction func buttonWasPressed(sender: AnyObject) {
-//        println("Button was pressed.")
         if let _ = timer {
             // Timer is running and button was pressed. Stop timer.
             stopTimer(.Paused)
@@ -167,7 +158,6 @@ class TimerDetailViewController: UIViewController {
     }
     
     @IBAction func resetWasPressed(sender: AnyObject) {
-//        println("Reset was pressed.")
         stopTimer(.Cancelled)
     }
     

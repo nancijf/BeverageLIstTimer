@@ -20,7 +20,7 @@ class ListTableViewController: UITableViewController {
         let controller = NSFetchedResultsController(fetchRequest: fetchRequest, managedObjectContext: appDelegate().coreDataStack.managedObjectContext, sectionNameKeyPath: "type", cacheName: nil)
         controller.delegate = self
         return controller
-        }()
+    }()
     
     enum TableSection: Int {
         case Coffee = 0
@@ -42,7 +42,7 @@ class ListTableViewController: UITableViewController {
             print("Error fetching: \(error)")
         }
         title = "Shopping List"
-        self.tableView.contentInset = UIEdgeInsetsMake(44.0, 0, 44.0, 0)
+        self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0)
     }
 
     override func didReceiveMemoryWarning() {
@@ -71,13 +71,11 @@ class ListTableViewController: UITableViewController {
         return sectionInfo.numberOfObjects ?? 0
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    {
         let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath) 
         let timerModel = timerModelForIndexPath(indexPath)
         cell.textLabel?.text = timerModel.name
-//        if let brand = timerModel.brand as BrandModel? {
-//            cell.detailTextLabel?.text = brand.name
-//        }
         if timerModel.selected {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
@@ -88,7 +86,8 @@ class ListTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
+    {
         let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
         headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
     }
@@ -111,11 +110,11 @@ class ListTableViewController: UITableViewController {
             cell.accessoryType = UITableViewCellAccessoryType.None
         }
     }
-
 }
 
 extension ListTableViewController: NSFetchedResultsControllerDelegate {
     func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        
         tableView.beginUpdates()
     }
     
@@ -123,8 +122,8 @@ extension ListTableViewController: NSFetchedResultsControllerDelegate {
         tableView.endUpdates()
     }
 
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
-        
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
+    {
         switch type {
         case .Insert:
             tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
