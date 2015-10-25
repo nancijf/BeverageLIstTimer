@@ -44,6 +44,11 @@ class ListTableViewController: UITableViewController {
         title = "Shopping List"
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0)
     }
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

@@ -1,7 +1,9 @@
 Alterra Coffee Roasters
 An Giang Coffee
+Argo
 Austin Chase
 Big Train
+Bigelow
 Boss Coffee
 Café Bom Dia
 Caffiato
@@ -12,6 +14,7 @@ Cafédirect
 Camp Coffee
 Capresso
 Caribou Coffee
+Celestial Sesonings
 Chase & Sanborn Coffee Company
 Chock full o'Nuts
 Coffee Bean and Tea Leaf
@@ -19,10 +22,13 @@ Coolatta
 Coop Kaffe
 Copper Moon
 Dallmayr
+David's
+Dilmah
 Douwe Egberts
 Easy Serving Espresso Pod
 Easy Serving Espresso Pod
 Eight O'Clock Coffee
+Enzo's
 Equal Exchange
 Equal Exchange Trading
 Espresso Vivace
@@ -35,6 +41,8 @@ FrancisFrancis
 Friele
 Gaggia
 Gevalia
+Good Earth Tea
+Gregory's
 Green Mountain Coffee Roasters
 Guglielmo coffee
 High Point
@@ -48,10 +56,12 @@ Kimbo
 Larry's Beans
 Lavazza
 Lavazza BLUE
+Lipton
 Löfbergs Lila
 Matthew Algie
 Maxwell House
 Melitta Premium Coffees
+Mighty Leaf
 Millstone Coffee
 MJB (coffee)
 Moccona
@@ -59,14 +69,27 @@ Mr. Brown Coffee
 Nabob
 Nescafé
 Newman's Own
+Numi Organic
 Peet's Coffee and Tea
 Pura Vida Coffee
+Red Rose
+Salada
 Seattle's Best Coffee
 Segafredo Zanetti
 Starbucks
+Stash
+Tazo
+Teavana
 Teeccino
+Tetley
+The Coffee Bean & Tea Leaf
+The Republic of Tea
 Torrefazione Settebello
 Tully's
+Twinings
 UCC Ueshima Coffee Co
+Upton
 World Harvest Estate Coffees (Organic)
+Yogi
+Yorkshire
 Yuban
