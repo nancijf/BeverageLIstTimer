@@ -75,14 +75,6 @@ class TimerListTableViewController: UITableViewController {
         }
         
         return timerModel
-//        if indexPath.section >= fetchedResultsController.sections?.count {
-//            let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
-//            if Int(sectionInfo.name) == TableSection.Tea.rawValue {
-//                return fetchedResultsController.objectAtIndexPath(NSIndexPath(forItem: 0, inSection: 0)) as! TimerModel
-//            }
-//        }
-//        
-//        return fetchedResultsController.objectAtIndexPath(indexPath) as! TimerModel
     }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?)
@@ -175,39 +167,6 @@ class TimerListTableViewController: UITableViewController {
             case TableSection.Tea.rawValue: return teas!.count
             default: return 0
         }
-//        var numberOfObjects = 0
-//        
-//        if fetchedResultsController.sections?.count == 0 {
-//            return 0
-//        }
-//        
-//        if section >= fetchedResultsController.sections?.count {
-//            guard let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])! else {
-//                numberOfObjects = 0
-//            }
-//            if sectionInfo.name == "1" {
-//                numberOfObjects = sectionInfo.numberOfObjects
-//            }
-//        }
-//        else if section == TableSection.Coffee.rawValue {
-//            guard let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])! else {
-//                return 0
-//            }
-//            if sectionInfo.name == "0" {
-//                numberOfObjects = sectionInfo.numberOfObjects
-//            } else {
-//                numberOfObjects = 0
-//            }
-//        }
-//        else if section == TableSection.Tea.rawValue {
-//            guard let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])! else {
-//                return 0
-//            }
-//            numberOfObjects = sectionInfo.numberOfObjects
-//        }
-//        
-//        print("section: \(section), numberOfObjects: \(numberOfObjects)")
-//        return numberOfObjects
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -353,13 +312,13 @@ class TimerListTableViewController: UITableViewController {
 }
 
 extension TimerListTableViewController: NSFetchedResultsControllerDelegate {
-//    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-//        tableView.beginUpdates()
-//    }
-//    
-//    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-//        tableView.endUpdates()
-//    }
+    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+        tableView.beginUpdates()
+    }
+    
+    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+        tableView.endUpdates()
+    }
     
     func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
     {
