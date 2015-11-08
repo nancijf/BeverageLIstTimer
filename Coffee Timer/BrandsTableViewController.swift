@@ -42,12 +42,25 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: searchBar)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "hideSearchView:"), animated: true)
         searchBar.placeholder = "Brand Name"
-        searchBar.becomeFirstResponder()
         searchActive = true
+        
+        print("width = \(self.view.bounds.size)")
+        let viewWidth = self.view.frame.width
+        let navBar = UINavigationBar(frame: CGRectMake(0, 0, viewWidth, 44))
+        navBar.backgroundColor = UIColor.grayColor();
+        navBar.alpha = 0.9;
+        let navItem = UINavigationItem()
+        let addBrandButton = UIBarButtonItem(title: "Add Brand to List", style: UIBarButtonItemStyle.Plain, target: self, action: "addNewBrand:")
+        navItem.rightBarButtonItem = addBrandButton
+        
+        navBar.pushNavigationItem(navItem, animated: false)
+        
+        searchBar.inputAccessoryView = navBar
+        searchBar.becomeFirstResponder()
+
     }
     
-    func hideSearchView(sender: UIBarButtonItem)
-    {
+    func hideSearchView(sender: UIBarButtonItem) {
         self.navigationItem.leftBarButtonItem = self.savedBackButton
         self.navigationItem.rightBarButtonItem = self.searchButton
         self.fetchedResultsController.fetchRequest.predicate = nil
@@ -60,6 +73,10 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
             print("Error fetching: \(error)")
         }
         tableView.reloadData()
+    }
+    
+    func addNewBrand() {
+        return
     }
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
