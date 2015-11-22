@@ -52,7 +52,6 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         searchBar.placeholder = "Brand Name"
         searchActive = true
         
-        print("width = \(self.view.bounds.size)")
         let viewWidth = self.view.frame.width
         let navBar = UINavigationBar(frame: CGRectMake(0, 0, viewWidth, 44))
         navBar.backgroundColor = UIColor.grayColor();
@@ -213,27 +212,27 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar)
     {
-        print("in searchBarDidBeginEditing")
+//        print("in searchBarDidBeginEditing")
         searchActive = true
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar)
     {
-        print("in searchBarDidEndEditing: \(searchBar.text)")
+//        print("in searchBarDidEndEditing: \(searchBar.text)")
         searchActive = false
         searchBar.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar)
     {
-        print("in searchBarCancelButtonClicked")
+//        print("in searchBarCancelButtonClicked")
         searchActive = false
         searchBar.text = ""
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar)
     {
-        print("in searchBarSearchButtonClicked")
+//        print("in searchBarSearchButtonClicked")
         searchActive = false
     }
     
@@ -247,7 +246,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
             error.memory = error1
             print("Error fetching: \(error)")
         }
-        print("in searchBar function")
+//      print("in searchBar function")
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
         if sectionInfo.numberOfObjects == 0 {
             addBrandButton.enabled = true

@@ -24,6 +24,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var timerTypeSegmentedControl: UISegmentedControl!
     
     @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
+        timerModel.managedObjectContext?.rollback()
         delegate?.timerEditViewControllerDidCancel(self)
         presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -31,11 +32,11 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
     @IBAction func doneWasPressed(sender: UIBarButtonItem) {
         timerModel.favorite = favoriteButton.selected
         timerModel.name = nameField.text
-        timerModel.brand.name = brandField.text!
         timerModel.duration = Int32(Int(minutesSlider.value) * 60 + Int(secondsSlider.value))
         if timerTypeSegmentedControl.selectedSegmentIndex == 0 {
             timerModel.type = .Coffee
-        } else { // Must be 1
+        }
+        else { // Must be 1
             timerModel.type = .Tea
         }
         delegate?.timerEditViewControllerDidSave(self)

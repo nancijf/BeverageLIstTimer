@@ -166,6 +166,8 @@ class TimerDetailViewController: UIViewController {
             let navigationController = segue.destinationViewController as! UINavigationController
             let editViewController = navigationController.topViewController as! TimerEditViewController
             editViewController.timerModel = timerModel
+            let listViewController = (parentViewController as! UINavigationController).viewControllers.first as! TimerListTableViewController
+            editViewController.delegate = listViewController
         }
     }
 }

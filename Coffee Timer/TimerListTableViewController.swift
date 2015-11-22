@@ -20,6 +20,7 @@ class TimerListTableViewController: UITableViewController {
     
     var userReorderingCells = false
     let cellIdentifier = "Cell"
+    var creatingNewTimer = false
     
     var _coffees: [TimerModel] {
         let request = NSFetchRequest(entityName: "TimerModel")
@@ -85,21 +86,25 @@ class TimerListTableViewController: UITableViewController {
             
             if segue.identifier == "pushDetail" {
                 let detailViewController = segue.destinationViewController as! TimerDetailViewController
+                
                 detailViewController.timerModel = timerModel
-            } else if segue.identifier == "editDetail" {
+            }
+            else if segue.identifier == "editDetail" {
                 let navigationController = segue.destinationViewController as! UINavigationController
                 let editViewController = navigationController.topViewController as! TimerEditViewController
                 
                 editViewController.timerModel = timerModel
                 editViewController.delegate = self
             }
-        } else if segue.identifier == "newTimer" {
-                let navigationController = segue.destinationViewController as! UINavigationController
-                let editViewController = navigationController.topViewController as! TimerEditViewController
-                
-                editViewController.creatingNewTimer = true
-                editViewController.timerModel = NSEntityDescription.insertNewObjectForEntityForName("TimerModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! TimerModel
-                editViewController.delegate = self
+        }
+        else if segue.identifier == "newTimer" {
+            let navigationController = segue.destinationViewController as! UINavigationController
+            let editViewController = navigationController.topViewController as! TimerEditViewController
+            
+            editViewController.creatingNewTimer = true
+            creatingNewTimer = true
+            editViewController.timerModel = NSEntityDescription.insertNewObjectForEntityForName("TimerModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! TimerModel
+            editViewController.delegate = self
         }
     }
     
@@ -134,9 +139,12 @@ class TimerListTableViewController: UITableViewController {
     override func viewWillAppear(animated: Bool)
     {
         super.viewWillAppear(animated)
-        if presentedViewController != nil {
-            tableView.reloadData()
-        }
+        tableView.reloadData()
+
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
     }
     
     override func setEditing(editing: Bool, animated: Bool)
@@ -250,7 +258,7 @@ class TimerListTableViewController: UITableViewController {
     }
     
     override func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
-       // If the source and destination index paths are the same section,
+        // If the source and destination index paths are the same section,
         // then return the proposed index path
         if sourceIndexPath.section == proposedDestinationIndexPath.section {
             return proposedDestinationIndexPath
@@ -274,32 +282,32 @@ class TimerListTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath)
-    {
-        userReorderingCells = true
-        
-        // Grab the section and the TimerModels in the section
-        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[sourceIndexPath.section])!
-        
-        var objectsInSection = sectionInfo.objects ?? []
-        
-        // Rearrange the order to match the user's actions
-        // Note: this doesn't move anything in Core Data, just our objectsInSection array
-        objectsInSection.moveFrom(sourceIndexPath.row, toDestination: destinationIndexPath.row)
-        
-        // The models are now in the correct order.
-        // Update their displayOrder to match the new order.
-        for i in 0..<objectsInSection.count {
-            let model = objectsInSection[i] as? TimerModel
-            model?.displayOrder = Int32(i)
-        }
-        
-        userReorderingCells = false
-        do {
-            try appDelegate().coreDataStack.managedObjectContext.save()
-        } catch _ {
-        }
-    }
+//    override func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath)
+//    {
+//        userReorderingCells = true
+//        
+//        // Grab the section and the TimerModels in the section
+//        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[sourceIndexPath.section])!
+//        
+//        var objectsInSection = sectionInfo.objects ?? []
+//        
+//        // Rearrange the order to match the user's actions
+//        // Note: this doesn't move anything in Core Data, just our objectsInSection array
+//        objectsInSection.moveFrom(sourceIndexPath.row, toDestination: destinationIndexPath.row)
+//        
+//        // The models are now in the correct order.
+//        // Update their displayOrder to match the new order.
+//        for i in 0..<objectsInSection.count {
+//            let model = objectsInSection[i] as? TimerModel
+//            model?.displayOrder = Int32(i)
+//        }
+//        
+//        userReorderingCells = false
+//        do {
+//            try appDelegate().coreDataStack.managedObjectContext.save()
+//        } catch _ {
+//        }
+//    }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
@@ -312,46 +320,68 @@ class TimerListTableViewController: UITableViewController {
 }
 
 extension TimerListTableViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
-        tableView.beginUpdates()
-    }
+//    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+//        tableView.beginUpdates()
+//    }
+//    
+//    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+//        tableView.endUpdates()
+//    }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
-        tableView.endUpdates()
-    }
-    
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
-    {
+//    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
+//    {
+//        if userReorderingCells {
+//            return
+//        }
+//        
+//        switch type {
+//        case .Insert:
+//            return
+//            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+//        case .Delete:
+//            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+//        case .Move:
+//            return
+//            tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
+//        case .Update:
+//            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+//        }
+//
+//        tableView.reloadData()
+//    }
+    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?) {
+        
         if userReorderingCells {
             return
         }
-        
-        switch type {
-        case .Insert:
-            return
-//            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
-        case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-        case .Move:
-            return
-//            tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
-        case .Update:
-            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-        }
 
-        tableView.reloadData()
+        switch type {
+        case .Delete:
+            if !creatingNewTimer {
+//                switch indexPath!.section {
+//                case TableSection.Coffee.rawValue:
+//                    coffees?.removeAtIndex(indexPath!.row)
+//                case TableSection.Tea.rawValue:
+//                    teas?.removeAtIndex(indexPath!.row)
+//                default:
+//                    return
+//                }
+                tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+                tableView.reloadData()
+            }
+        default:
+            return
+        }
     }
 }
 
 extension TimerListTableViewController: TimerEditViewControllerDelegate {
     func timerEditViewControllerDidCancel(viewController: TimerEditViewController)
     {
-        if viewController.creatingNewTimer {
-            appDelegate().coreDataStack.managedObjectContext.deleteObject(viewController.timerModel)
-            coffees = _coffees
-            teas = _teas
-            tableView.reloadData()
-        }
+        coffees = _coffees
+        teas = _teas
+        tableView.reloadData()
+        creatingNewTimer = false
     }
     
     func timerEditViewControllerDidSave(viewController: TimerEditViewController) {
@@ -359,5 +389,6 @@ extension TimerListTableViewController: TimerEditViewControllerDelegate {
         coffees = _coffees
         teas = _teas
         tableView.reloadData()
+        creatingNewTimer = false
     }
 }

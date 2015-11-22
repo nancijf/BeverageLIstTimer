@@ -69,7 +69,6 @@ class ListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("in viewDidLoad")
         let error = NSErrorPointer()
         do {
             try fetchedResultsController.performFetch()
@@ -84,7 +83,6 @@ class ListTableViewController: UITableViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        print("in viewWillAppear")
         coffees = _coffees
         teas = _teas
         tableView.reloadData()
