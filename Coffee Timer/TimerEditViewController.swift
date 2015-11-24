@@ -145,17 +145,17 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
     }
     
-    func keyboardWillShow(notification: NSNotification) {
-        if let userInfo = notification.userInfo {
-            if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size {
-                let contentInset = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
-            }
-        }
-    }
+//    func keyboardWillShow(notification: NSNotification) {
+//        if let userInfo = notification.userInfo {
+//            if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size {
+//                let contentInset = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
+//            }
+//        }
+//    }
     
-    func keyboardWillHide(notification: NSNotification) {
-        let contentInset = UIEdgeInsetsZero;
-    }
+//    func keyboardWillHide(notification: NSNotification) {
+//        let contentInset = UIEdgeInsetsZero;
+//    }
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         if textField.tag == 1 {

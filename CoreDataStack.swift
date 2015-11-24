@@ -17,7 +17,7 @@ class CoreDataStack: CustomStringConvertible {
     var storeURL: NSURL?
     
     lazy var managedObjectContext: NSManagedObjectContext = {
-        let moc = NSManagedObjectContext()
+        let moc = NSManagedObjectContext(concurrencyType: .PrivateQueueConcurrencyType)
         moc.persistentStoreCoordinator = self.persistentStoreCoordinator
         return moc
     }()
