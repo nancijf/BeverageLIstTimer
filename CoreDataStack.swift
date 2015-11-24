@@ -100,7 +100,7 @@ class CoreDataStack: CustomStringConvertible {
                 
                 switch i {
                 case 0:
-                    model.name = NSLocalizedString("Colombian", comment: "Columbian coffee name")
+                    model.name = NSLocalizedString("French Roast", comment: "French Roast coffee name")
                     model.duration = 240
                     model.type = .Coffee
                     let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Starbucks'")) as! [BrandModel]).first
@@ -115,13 +115,13 @@ class CoreDataStack: CustomStringConvertible {
                     model.name = NSLocalizedString("Green Tea", comment: "Green tea name")
                     model.duration = 400
                     model.type = .Tea
-                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Dallmayr'")) as! [BrandModel]).first
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Bigelow'")) as! [BrandModel]).first
                     model.brand = brand!
                 case 3:
                     model.name = NSLocalizedString("Oolong", comment: "Oolong tea name")
                     model.duration = 400
                     model.type = .Tea
-                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Gevalia'")) as! [BrandModel]).first
+                    let brand = (results.filteredArrayUsingPredicate(NSPredicate(format: "name == 'Teavana'")) as! [BrandModel]).first
                     model.brand = brand!
                 case 4:
                     model.name = NSLocalizedString("Veranda", comment: "Veranda coffee name")
