@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Foundation
 
 @objc protocol TimerEditViewControllerDelegate {
     func timerEditViewControllerDidCancel(viewController: TimerEditViewController)
@@ -95,15 +96,15 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         brandField.delegate = self
     }
     
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(animated)
-        startObservingKeyboardEvents()
-    }
-    
-    override func viewWillDisappear(animated: Bool) {
-        super.viewWillDisappear(animated)
-        stopObservingKeyboardEvents()
-    }
+//    override func viewWillAppear(animated: Bool) {
+//        super.viewWillAppear(animated)
+//        startObservingKeyboardEvents()
+//    }
+//    
+//    override func viewWillDisappear(animated: Bool) {
+//        super.viewWillDisappear(animated)
+//        stopObservingKeyboardEvents()
+//    }
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "BrandSelection" {
@@ -129,37 +130,34 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: - Keyboard observer convenience
     
-    private func startObservingKeyboardEvents() {
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector:Selector("keyboardWillShow:"),
-            name:UIKeyboardWillShowNotification,
-            object:nil)
-        NSNotificationCenter.defaultCenter().addObserver(self,
-            selector:Selector("keyboardWillHide:"),
-            name:UIKeyboardWillHideNotification,
-            object:nil)
-    }
-    
-    private func stopObservingKeyboardEvents() {
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
-        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
-    }
-    
-//    func keyboardWillShow(notification: NSNotification) {
-//        if let userInfo = notification.userInfo {
-//            if let keyboardSize: CGSize = userInfo[UIKeyboardFrameEndUserInfoKey]?.CGRectValue.size {
-//                let contentInset = UIEdgeInsetsMake(0.0, 0.0, keyboardSize.height, 0.0);
-//            }
-//        }
+//    private func startObservingKeyboardEvents() {
+//        NSNotificationCenter.defaultCenter().addObserver(self,
+//            selector:Selector("keyboardWillShow:"),
+//            name:UIKeyboardWillShowNotification,
+//            object:nil)
+//        NSNotificationCenter.defaultCenter().addObserver(self,
+//            selector:Selector("keyboardWillHide:"),
+//            name:UIKeyboardWillHideNotification,
+//            object:nil)
 //    }
-    
+//    
+//    private func stopObservingKeyboardEvents() {
+//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillShowNotification, object: nil)
+//        NSNotificationCenter.defaultCenter().removeObserver(self, name: UIKeyboardWillHideNotification, object: nil)
+//    }
+//    
+//    func keyboardWillShow(notification: NSNotification) {
+//        
+//    }
+//    
 //    func keyboardWillHide(notification: NSNotification) {
-//        let contentInset = UIEdgeInsetsZero;
+//        
 //    }
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
         if textField.tag == 1 {
-            textField.resignFirstResponder()
+            self.view.endEditing(true)
+//            textField.resignFirstResponder()
             self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
             return false
         }
