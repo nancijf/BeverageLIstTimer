@@ -90,6 +90,7 @@ class TimerListTableViewController: UITableViewController {
                 detailViewController.timerModel = timerModel
             }
             else if segue.identifier == "editDetail" {
+                print("editDetail prepareForSegue")
                 let navigationController = segue.destinationViewController as! UINavigationController
                 let editViewController = navigationController.topViewController as! TimerEditViewController
                 
@@ -110,6 +111,7 @@ class TimerListTableViewController: UITableViewController {
     
     override func shouldPerformSegueWithIdentifier(identifier: String?, sender: AnyObject?) -> Bool
     {
+        print("editDetail shouldPerformSegueWithIdentifier")
         if identifier == "pushDetail" {
             if tableView.editing {
                 return false
@@ -178,6 +180,7 @@ class TimerListTableViewController: UITableViewController {
     }
 
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        print("in didSelectRowAtIndexPath")
         if tableView.editing {
             let cell = tableView.cellForRowAtIndexPath(indexPath)
             performSegueWithIdentifier("editDetail", sender: cell)

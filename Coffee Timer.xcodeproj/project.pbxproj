@@ -439,13 +439,15 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				DEVELOPMENT_TEAM = KD7N7R2FNY;
 				INFOPLIST_FILE = "Coffee Timer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nfapps.beveragetime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "aa92d535-2970-4f01-98ac-445f19d4adf8";
+				PROVISIONING_PROFILE_SPECIFIER = "BeverageTime Distribution";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -456,12 +458,14 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Nanci Frank (KD7N7R2FNY)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Nanci Frank (KD7N7R2FNY)";
+				DEVELOPMENT_TEAM = KD7N7R2FNY;
 				INFOPLIST_FILE = "Coffee Timer/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.nfapps.beveragetime;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "aa92d535-2970-4f01-98ac-445f19d4adf8";
+				PROVISIONING_PROFILE_SPECIFIER = "BeverageTime Distribution";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
