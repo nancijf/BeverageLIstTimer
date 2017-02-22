@@ -11,6 +11,27 @@ import CoreData
 
 class ListTableViewController: UITableViewController {
     
+    var _coffees: [TimerModel] {
+        let request = NSFetchRequest(entityName: "TimerModel")
+        request.predicate = NSPredicate(format: "type == %d", TableSection.Coffee.rawValue)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")]
+        let coffees: [TimerModel] = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request) as! [TimerModel]
+        
+        return coffees
+    }
+    
+    var _teas: [TimerModel] {
+        let request = NSFetchRequest(entityName: "TimerModel")
+        request.predicate = NSPredicate(format: "type == %d", TableSection.Tea.rawValue)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")]
+        let teas: [TimerModel] = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request) as! [TimerModel]
+        
+        return teas
+    }
+    
+    var coffees: [TimerModel]?
+    var teas: [TimerModel]?
+    
     lazy var fetchedResultsController: NSFetchedResultsController = {
         let fetchRequest = NSFetchRequest(entityName: "TimerModel")
         fetchRequest.sortDescriptors = [
@@ -28,8 +49,22 @@ class ListTableViewController: UITableViewController {
         case NumberOfSections
     }
 
-    func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel {
-        return fetchedResultsController.objectAtIndexPath(indexPath) as! TimerModel
+    func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel? {
+        var timerModel: TimerModel?
+        
+        switch indexPath.section {
+        case TableSection.Coffee.rawValue:
+            if self.coffees!.count > 0 {
+                timerModel = coffees![indexPath.row]
+            }
+        case TableSection.Tea.rawValue:
+            if self.teas!.count > 0 {
+                timerModel = teas![indexPath.row]
+            }
+        default: return timerModel
+        }
+        
+        return timerModel
     }
 
     override func viewDidLoad() {
@@ -43,10 +78,13 @@ class ListTableViewController: UITableViewController {
         }
         title = "Shopping List"
         self.tableView.contentInset = UIEdgeInsetsMake(0, 0, 44.0, 0)
+        
     }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        coffees = _coffees
+        teas = _teas
         tableView.reloadData()
     }
 
@@ -59,7 +97,7 @@ class ListTableViewController: UITableViewController {
 
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         // Return the number of sections.
-        return (fetchedResultsController.sections ?? []).count
+        return TableSection.NumberOfSections.rawValue
     }
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -72,20 +110,24 @@ class ListTableViewController: UITableViewController {
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
-        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
-        return sectionInfo.numberOfObjects ?? 0
+        switch section {
+            case TableSection.Coffee.rawValue: return coffees!.count
+            case TableSection.Tea.rawValue: return teas!.count
+            default: return 0
+        }
     }
     
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath) 
-        let timerModel = timerModelForIndexPath(indexPath)
-        cell.textLabel?.text = timerModel.name
-        if timerModel.selected {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
-        }
-        else {
-            cell.accessoryType = UITableViewCellAccessoryType.None
+        let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath)
+        if let timerModel: TimerModel = timerModelForIndexPath(indexPath) {
+            cell.textLabel?.text = timerModel.name
+            if timerModel.selected {
+                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            }
+            else {
+                cell.accessoryType = UITableViewCellAccessoryType.None
+            }
         }
 
         return cell
@@ -105,10 +147,10 @@ class ListTableViewController: UITableViewController {
     {
         let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath) 
         let timerModel = timerModelForIndexPath(indexPath)
-        timerModel.selected = !timerModel.selected
+        timerModel!.selected = !timerModel!.selected
         appDelegate().saveCoreData()
         
-        if timerModel.selected {
+        if timerModel!.selected {
             cell.accessoryType = UITableViewCellAccessoryType.Checkmark
         }
         else {
@@ -131,11 +173,14 @@ extension ListTableViewController: NSFetchedResultsControllerDelegate {
     {
         switch type {
         case .Insert:
-            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
+            return
+//            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
         case .Delete:
-            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+            return
+//            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         case .Move:
-            tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
+            return
+//            tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
         case .Update:
             tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
         }

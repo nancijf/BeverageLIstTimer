@@ -29,8 +29,16 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     lazy var searchBar:UISearchBar =
     {
-        let searchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
+        let searchBarWidth = self.view.frame.width * 0.5
+        let searchBar = UISearchBar(frame: CGRectMake(0, 0, searchBarWidth, 20))
         return searchBar
+    }()
+    
+    lazy var addBrandButton: UIBarButtonItem = {
+        let addBrandButton = UIBarButtonItem(title: "Add Brand to List", style: UIBarButtonItemStyle.Plain, target: self, action: "addNewBrand:")
+        addBrandButton.enabled = false
+        
+        return addBrandButton
     }()
     
     let cellIdentifier = "brandCell"
@@ -42,12 +50,22 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: searchBar)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "hideSearchView:"), animated: true)
         searchBar.placeholder = "Brand Name"
-        searchBar.becomeFirstResponder()
         searchActive = true
+        
+        let viewWidth = self.view.frame.width
+        let navBar = UINavigationBar(frame: CGRectMake(0, 0, viewWidth, 44))
+        navBar.backgroundColor = UIColor.grayColor();
+        navBar.alpha = 0.9;
+        let navItem = UINavigationItem()
+        navItem.rightBarButtonItem = addBrandButton
+        
+        navBar.pushNavigationItem(navItem, animated: false)
+        
+        searchBar.inputAccessoryView = navBar
+        searchBar.becomeFirstResponder()
     }
     
-    func hideSearchView(sender: UIBarButtonItem)
-    {
+    func hideSearchView(sender: UIBarButtonItem) {
         self.navigationItem.leftBarButtonItem = self.savedBackButton
         self.navigationItem.rightBarButtonItem = self.searchButton
         self.fetchedResultsController.fetchRequest.predicate = nil
@@ -60,6 +78,36 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
             print("Error fetching: \(error)")
         }
         tableView.reloadData()
+    }
+    
+    func addNewBrand(sender: UIBarButtonItem) {
+        let brand = NSEntityDescription.insertNewObjectForEntityForName("BrandModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! BrandModel
+        brand.name = searchBar.text!
+        appDelegate().saveCoreData()
+        self.brandSelected = brand
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+        hideSearchView(sender)
+        tableView.reloadData()
+        selectedIndex = findSelectedIndexForBrand(self.brandSelected)!
+        tableView.scrollToRowAtIndexPath(selectedIndex, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        brandsViewControllerDidFinishSelectingBrand(brand)
+        self.navigationController?.popViewControllerAnimated(true)
+    }
+    
+    func findSelectedIndexForBrand(brandSelected: BrandModel?) -> NSIndexPath? {
+        var selectedIndex: NSIndexPath?
+        let request = NSFetchRequest(entityName: "BrandModel")
+        request.sortDescriptors = [
+            NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")
+        ]
+        let results: NSArray = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request)
+        
+        if brandSelected != nil {
+            selectedIndex = NSIndexPath(forItem: results.indexOfObject(brandSelected!), inSection: 0)
+        }
+        
+        return selectedIndex
     }
     
     lazy var fetchedResultsController: NSFetchedResultsController = {
@@ -75,23 +123,20 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     override func viewDidLoad()
     {
         super.viewDidLoad()
+        
+        self.title = "Brands"
         let error = NSErrorPointer()
+        searchBar.delegate = self
         do {
             try fetchedResultsController.performFetch()
         } catch let error1 as NSError {
             error.memory = error1
             print("Error fetching: \(error)")
         }
-        self.title = "Brands"
-        let request = NSFetchRequest(entityName: "BrandModel")
-        request.sortDescriptors = [
-            NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")
-        ]
-        let results: NSArray = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request)
-        if brandSelected != nil {
-            selectedIndex = NSIndexPath(forItem: results.indexOfObject(brandSelected!), inSection: 0)
+
+        if self.brandSelected != nil {
+            selectedIndex = findSelectedIndexForBrand(self.brandSelected)!
         }
-        searchBar.delegate = self
     }
     
     override func viewWillAppear(animated: Bool)
@@ -167,22 +212,28 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     func searchBarTextDidBeginEditing(searchBar: UISearchBar)
     {
-        searchActive = true;
+//        print("in searchBarDidBeginEditing")
+        searchActive = true
     }
     
     func searchBarTextDidEndEditing(searchBar: UISearchBar)
     {
-        searchActive = false;
+//        print("in searchBarDidEndEditing: \(searchBar.text)")
+        searchActive = false
+        searchBar.resignFirstResponder()
     }
     
     func searchBarCancelButtonClicked(searchBar: UISearchBar)
     {
-        searchActive = false;
+//        print("in searchBarCancelButtonClicked")
+        searchActive = false
+        searchBar.text = ""
     }
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar)
     {
-        searchActive = false;
+//        print("in searchBarSearchButtonClicked")
+        searchActive = false
     }
     
     func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
@@ -195,7 +246,14 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
             error.memory = error1
             print("Error fetching: \(error)")
         }
+//      print("in searchBar function")
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
+        if sectionInfo.numberOfObjects == 0 {
+            addBrandButton.enabled = true
+        }
+        else {
+            addBrandButton.enabled = false
+        }
         tableView.reloadData()
     }
 

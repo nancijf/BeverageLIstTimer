@@ -104,7 +104,6 @@ class FavoritesTableViewController: UITableViewController
     
     override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String?
     {
-        print("section header = \(TableSection.Coffee.rawValue)")
         if section == TableSection.Coffee.rawValue {
             return "Coffee"
         } else {
