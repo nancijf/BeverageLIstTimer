@@ -10,7 +10,7 @@ import UIKit
 import CoreData
 
 func appDelegate() -> AppDelegate {
-    return UIApplication.sharedApplication().delegate as! AppDelegate            
+    return UIApplication.shared.delegate as! AppDelegate            
 }
 
 @UIApplicationMain
@@ -22,49 +22,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return CoreDataStack(
             modelName: "CoffeeTimer",
             storeName: "CoffeeTimer",
-            options: [NSMigratePersistentStoresAutomaticallyOption: true, NSInferMappingModelAutomaticallyOption: true])
+            options: [NSMigratePersistentStoresAutomaticallyOption as NSObject: true as AnyObject, NSInferMappingModelAutomaticallyOption as NSObject: true as AnyObject])
     }()
     
     func saveCoreData() {
-        let error = NSErrorPointer()
+        let error: NSErrorPointer = nil
         do {
             try coreDataStack.managedObjectContext.save()
         } catch let error1 as NSError {
-            error.memory = error1
+            error?.pointee = error1
             print("Error saving context: \(error)")
         }
     }
 
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         coreDataStack.loadDefaultDataIfFirstLaunch()
         window?.tintColor = UIColor(red:0.95, green:0.53, blue:0.27, alpha:1)
         return true
     }
     
-    func application(application: UIApplication, didReceiveLocalNotification notification: UILocalNotification) {
-        let alertController = UIAlertController(title: notification.alertTitle, message: notification.alertBody, preferredStyle: .Alert)
-        let okAction = UIAlertAction(title: "OK", style: .Default, handler: nil)
+    func application(_ application: UIApplication, didReceive notification: UILocalNotification) {
+        let alertController = UIAlertController(title: notification.alertTitle, message: notification.alertBody, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
         alertController.addAction(okAction)
-        window!.rootViewController!.presentViewController(alertController, animated: true, completion: nil)
+        window!.rootViewController!.present(alertController, animated: true, completion: nil)
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         self.saveCoreData()
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         print("Application has entered background.")
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         print("Application has entered foreground.")
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         print("Application has become active.")
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         print("Application will terminate.")
     }
 

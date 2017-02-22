@@ -12,8 +12,8 @@ import CoreData
 class TimerModel: NSManagedObject {
     
     @objc enum TimerType: Int32 {
-        case Coffee = 0
-        case Tea
+        case coffee = 0
+        case tea
     }
     
     @NSManaged var name: String?

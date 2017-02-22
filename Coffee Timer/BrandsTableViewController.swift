@@ -12,7 +12,7 @@ import CoreData
 
 @objc protocol BrandsTableViewControllerDelegate
 {
-    func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel)
+    func brandsTableViewControllerDidFinishSelectingBrand(_ viewController: BrandsTableViewController, brand: BrandModel)
 }
 
 class BrandsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate
@@ -20,68 +20,68 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     weak var delegate: BrandsTableViewControllerDelegate?
     var brandSelected: BrandModel?
-    var selectedIndex: NSIndexPath = NSIndexPath(forItem: 0, inSection: 0)
+    var selectedIndex: IndexPath = IndexPath(item: 0, section: 0)
     var savedBackButton: UIBarButtonItem?
     var searchButton: UIBarButtonItem?
     var searchActive: Bool = false
     var filtered:[String] = []
-    var brandCompletion: ((brand: BrandModel) -> ())?
+    var brandCompletion: ((_ brand: BrandModel) -> ())?
     
     lazy var searchBar:UISearchBar =
     {
         let searchBarWidth = self.view.frame.width * 0.5
-        let searchBar = UISearchBar(frame: CGRectMake(0, 0, searchBarWidth, 20))
+        let searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: searchBarWidth, height: 20))
         return searchBar
     }()
     
     lazy var addBrandButton: UIBarButtonItem = {
-        let addBrandButton = UIBarButtonItem(title: "Add Brand to List", style: UIBarButtonItemStyle.Plain, target: self, action: "addNewBrand:")
-        addBrandButton.enabled = false
+        let addBrandButton = UIBarButtonItem(title: "Add Brand to List", style: UIBarButtonItemStyle.plain, target: self, action: #selector(BrandsTableViewController.addNewBrand(_:)))
+        addBrandButton.isEnabled = false
         
         return addBrandButton
     }()
     
     let cellIdentifier = "brandCell"
     
-    @IBAction func showSearchView(sender: UIBarButtonItem)
+    @IBAction func showSearchView(_ sender: UIBarButtonItem)
     {
         self.savedBackButton = self.navigationItem.leftBarButtonItem
         self.searchButton = self.navigationItem.rightBarButtonItem
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: searchBar)
-        self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "hideSearchView:"), animated: true)
+        self.navigationItem.setRightBarButton(UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(BrandsTableViewController.hideSearchView(_:))), animated: true)
         searchBar.placeholder = "Brand Name"
         searchActive = true
         
         let viewWidth = self.view.frame.width
-        let navBar = UINavigationBar(frame: CGRectMake(0, 0, viewWidth, 44))
-        navBar.backgroundColor = UIColor.grayColor();
+        let navBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: viewWidth, height: 44))
+        navBar.backgroundColor = UIColor.gray;
         navBar.alpha = 0.9;
         let navItem = UINavigationItem()
         navItem.rightBarButtonItem = addBrandButton
         
-        navBar.pushNavigationItem(navItem, animated: false)
+        navBar.pushItem(navItem, animated: false)
         
         searchBar.inputAccessoryView = navBar
         searchBar.becomeFirstResponder()
     }
     
-    func hideSearchView(sender: UIBarButtonItem) {
+    func hideSearchView(_ sender: UIBarButtonItem) {
         self.navigationItem.leftBarButtonItem = self.savedBackButton
         self.navigationItem.rightBarButtonItem = self.searchButton
         self.fetchedResultsController.fetchRequest.predicate = nil
         searchActive = false
-        let error = NSErrorPointer()
+        let error: NSErrorPointer = nil
         do {
             try fetchedResultsController.performFetch()
         } catch let error1 as NSError {
-            error.memory = error1
+            error?.pointee = error1
             print("Error fetching: \(error)")
         }
         tableView.reloadData()
     }
     
-    func addNewBrand(sender: UIBarButtonItem) {
-        let brand = NSEntityDescription.insertNewObjectForEntityForName("BrandModel", inManagedObjectContext: appDelegate().coreDataStack.managedObjectContext) as! BrandModel
+    func addNewBrand(_ sender: UIBarButtonItem) {
+        let brand = NSEntityDescription.insertNewObject(forEntityName: "BrandModel", into: appDelegate().coreDataStack.managedObjectContext) as! BrandModel
         brand.name = searchBar.text!
         appDelegate().saveCoreData()
         self.brandSelected = brand
@@ -90,28 +90,28 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         hideSearchView(sender)
         tableView.reloadData()
         selectedIndex = findSelectedIndexForBrand(self.brandSelected)!
-        tableView.scrollToRowAtIndexPath(selectedIndex, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        tableView.scrollToRow(at: selectedIndex, at: UITableViewScrollPosition.top, animated: true)
         brandsViewControllerDidFinishSelectingBrand(brand)
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    func findSelectedIndexForBrand(brandSelected: BrandModel?) -> NSIndexPath? {
-        var selectedIndex: NSIndexPath?
-        let request = NSFetchRequest(entityName: "BrandModel")
+    func findSelectedIndexForBrand(_ brandSelected: BrandModel?) -> IndexPath? {
+        var selectedIndex: IndexPath?
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "BrandModel")
         request.sortDescriptors = [
-            NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")
+            NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))
         ]
-        let results: NSArray = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request)
+        let results: NSArray = try! appDelegate().coreDataStack.managedObjectContext.fetch(request) as NSArray
         
         if brandSelected != nil {
-            selectedIndex = NSIndexPath(forItem: results.indexOfObject(brandSelected!), inSection: 0)
+            selectedIndex = IndexPath(item: results.index(of: brandSelected!), section: 0)
         }
         
         return selectedIndex
     }
     
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: "BrandModel")
+    lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "BrandModel")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")
          ]
@@ -125,12 +125,12 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         super.viewDidLoad()
         
         self.title = "Brands"
-        let error = NSErrorPointer()
+        let error: NSErrorPointer = nil
         searchBar.delegate = self
         do {
             try fetchedResultsController.performFetch()
         } catch let error1 as NSError {
-            error.memory = error1
+            error?.pointee = error1
             print("Error fetching: \(error)")
         }
 
@@ -139,7 +139,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         }
     }
     
-    override func viewWillAppear(animated: Bool)
+    override func viewWillAppear(_ animated: Bool)
     {
         super.viewWillAppear(animated)
         if presentedViewController != nil {
@@ -147,9 +147,9 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         }
     }
     
-    override func viewDidAppear(animated: Bool)
+    override func viewDidAppear(_ animated: Bool)
     {
-        tableView.scrollToRowAtIndexPath(selectedIndex, atScrollPosition: UITableViewScrollPosition.Top, animated: true)
+        tableView.scrollToRow(at: selectedIndex, at: UITableViewScrollPosition.top, animated: true)
     }
 
     override func didReceiveMemoryWarning()
@@ -160,99 +160,99 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int
+    override func numberOfSections(in tableView: UITableView) -> Int
     {
         return 1
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
         return sectionInfo.numberOfObjects ?? 0
     }
 
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) 
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) 
         let brandModel = brandModelForIndexPath(indexPath)
         cell.textLabel?.text = brandModel.name
         if brandSelected != nil && !searchActive {
             if brandModel == brandSelected {
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                cell.accessoryType = UITableViewCellAccessoryType.checkmark
             }
             else {
-                cell.accessoryType = UITableViewCellAccessoryType.None
+                cell.accessoryType = UITableViewCellAccessoryType.none
             }
         }
         else if searchActive {
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
         }
 
         return cell
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
         let brand: BrandModel = brandModelForIndexPath(indexPath)
         brandsViewControllerDidFinishSelectingBrand(brand)
-        self.navigationController?.popViewControllerAnimated(true)
+        self.navigationController?.popViewController(animated: true)
     }
     
-    func brandModelForIndexPath(indexPath: NSIndexPath) -> BrandModel
+    func brandModelForIndexPath(_ indexPath: IndexPath) -> BrandModel
     {
-        return fetchedResultsController.objectAtIndexPath(indexPath) as! BrandModel
+        return fetchedResultsController.object(at: indexPath) as! BrandModel
     }
     
-    func brandsViewControllerDidFinishSelectingBrand(brand: BrandModel)
+    func brandsViewControllerDidFinishSelectingBrand(_ brand: BrandModel)
     {
-        brandCompletion!(brand: brand)
+        brandCompletion!(brand)
     }
 
     /// MARK: - Search Bar Delegate 
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar)
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar)
     {
 //        print("in searchBarDidBeginEditing")
         searchActive = true
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar)
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar)
     {
 //        print("in searchBarDidEndEditing: \(searchBar.text)")
         searchActive = false
         searchBar.resignFirstResponder()
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar)
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar)
     {
 //        print("in searchBarCancelButtonClicked")
         searchActive = false
         searchBar.text = ""
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar)
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar)
     {
 //        print("in searchBarSearchButtonClicked")
         searchActive = false
     }
     
-    func searchBar(searchBar: UISearchBar, textDidChange searchText: String)
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String)
     {
         fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "name BEGINSWITH[cd] %@", searchText)
-        let error = NSErrorPointer()
+        let error: NSErrorPointer = nil
         do {
             try fetchedResultsController.performFetch()
         } catch let error1 as NSError {
-            error.memory = error1
+            error?.pointee = error1
             print("Error fetching: \(error)")
         }
 //      print("in searchBar function")
         let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
         if sectionInfo.numberOfObjects == 0 {
-            addBrandButton.enabled = true
+            addBrandButton.isEnabled = true
         }
         else {
-            addBrandButton.enabled = false
+            addBrandButton.isEnabled = false
         }
         tableView.reloadData()
     }

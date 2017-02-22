@@ -10,8 +10,8 @@ import UIKit
 import Foundation
 
 @objc protocol TimerEditViewControllerDelegate {
-    func timerEditViewControllerDidCancel(viewController: TimerEditViewController)
-    func timerEditViewControllerDidSave(viewController: TimerEditViewController)
+    func timerEditViewControllerDidCancel(_ viewController: TimerEditViewController)
+    func timerEditViewControllerDidSave(_ viewController: TimerEditViewController)
 }
 
 class TimerEditViewController: UIViewController, UITextFieldDelegate {
@@ -24,34 +24,34 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var timerTypeSegmentedControl: UISegmentedControl!
     
-    @IBAction func cancelWasPressed(sender: UIBarButtonItem) {
+    @IBAction func cancelWasPressed(_ sender: UIBarButtonItem) {
         timerModel.managedObjectContext?.rollback()
         delegate?.timerEditViewControllerDidCancel(self)
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func doneWasPressed(sender: UIBarButtonItem) {
-        timerModel.favorite = favoriteButton.selected
+    @IBAction func doneWasPressed(_ sender: UIBarButtonItem) {
+        timerModel.favorite = favoriteButton.isSelected
         timerModel.name = nameField.text
         timerModel.duration = Int32(Int(minutesSlider.value) * 60 + Int(secondsSlider.value))
         if timerTypeSegmentedControl.selectedSegmentIndex == 0 {
-            timerModel.type = .Coffee
+            timerModel.type = .coffee
         }
         else { // Must be 1
-            timerModel.type = .Tea
+            timerModel.type = .tea
         }
         delegate?.timerEditViewControllerDidSave(self)
-        presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+        presentingViewController?.dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func sliderValueChanged(sender: UISlider) {
+    @IBAction func sliderValueChanged(_ sender: UISlider) {
         let numberOfMinutes = Int(minutesSlider.value)
         let numberOfSeconds = Int(secondsSlider.value)
         updateLabelsWithMinutes(numberOfMinutes, seconds: numberOfSeconds)
     }
     
-    @IBAction func tapFavoriteButton(sender: UIButton) {
-        sender.selected = !sender.selected
+    @IBAction func tapFavoriteButton(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
     }
     
     @IBOutlet weak var favoriteButton: UIButton!
@@ -62,8 +62,8 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var secondsLabel: UILabel!
     @IBOutlet weak var secondsSlider: UISlider!
     
-    func updateLabelsWithMinutes(minutes: Int, seconds: Int) {
-        func pluralize(value: Int, singular: String, plural: String) -> String {
+    func updateLabelsWithMinutes(_ minutes: Int, seconds: Int) {
+        func pluralize(_ value: Int, singular: String, plural: String) -> String {
             switch value {
             case 1: return "1 \(singular)"
             case let pluralValue: return "\(pluralValue) \(plural)"
@@ -77,8 +77,8 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         switch timerModel.type {
-            case .Coffee: timerTypeSegmentedControl.selectedSegmentIndex = 0
-            case .Tea: timerTypeSegmentedControl.selectedSegmentIndex = 1
+            case .coffee: timerTypeSegmentedControl.selectedSegmentIndex = 0
+            case .tea: timerTypeSegmentedControl.selectedSegmentIndex = 1
         }
         let numberOfMinutes = Int(timerModel.duration / 60)
         let numberOfSeconds = Int(timerModel.duration % 60)
@@ -86,12 +86,12 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         if let brand = timerModel.brand as BrandModel? {
             brandField.text = brand.name
         }
-        favoriteButton.selected = timerModel.favorite
+        favoriteButton.isSelected = timerModel.favorite
         
         updateLabelsWithMinutes(numberOfMinutes, seconds: numberOfSeconds)
         minutesSlider.value = Float(numberOfMinutes)
         secondsSlider.value = Float(numberOfSeconds)
-        favoriteButton.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)
+        favoriteButton.setImage(UIImage(named: "checked"), for: UIControlState.selected)
         nameField.delegate = self
         brandField.delegate = self
     }
@@ -106,9 +106,9 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
 //        stopObservingKeyboardEvents()
 //    }
     
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "BrandSelection" {
-            let brandsTableViewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
+            let brandsTableViewController: BrandsTableViewController = segue.destination as! BrandsTableViewController
             brandsTableViewController.brandCompletion = {(brand: BrandModel) -> () in self
                 self.timerModel.brand = brand
                 self.brandField.text = brand.name
@@ -118,7 +118,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
-    func textFieldShouldReturn(textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         return false
     }
@@ -154,11 +154,11 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
 //        
 //    }
     
-    func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
         if textField.tag == 1 {
             self.view.endEditing(true)
 //            textField.resignFirstResponder()
-            self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
+            self.performSegue(withIdentifier: "BrandSelection", sender: timerModel.brand)
             return false
         }
         return true
@@ -170,7 +170,7 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate {
 
 extension TimerEditViewController: BrandsTableViewControllerDelegate
 {
-    func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
+    func brandsTableViewControllerDidFinishSelectingBrand(_ viewController: BrandsTableViewController, brand: BrandModel) {
         timerModel.brand = brand
         brandField.text = brand.name
     }

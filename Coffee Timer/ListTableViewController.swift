@@ -12,19 +12,19 @@ import CoreData
 class ListTableViewController: UITableViewController {
     
     var _coffees: [TimerModel] {
-        let request = NSFetchRequest(entityName: "TimerModel")
-        request.predicate = NSPredicate(format: "type == %d", TableSection.Coffee.rawValue)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")]
-        let coffees: [TimerModel] = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request) as! [TimerModel]
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TimerModel")
+        request.predicate = NSPredicate(format: "type == %d", TableSection.coffee.rawValue)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))]
+        let coffees: [TimerModel] = try! appDelegate().coreDataStack.managedObjectContext.fetch(request) as! [TimerModel]
         
         return coffees
     }
     
     var _teas: [TimerModel] {
-        let request = NSFetchRequest(entityName: "TimerModel")
-        request.predicate = NSPredicate(format: "type == %d", TableSection.Tea.rawValue)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")]
-        let teas: [TimerModel] = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request) as! [TimerModel]
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: "TimerModel")
+        request.predicate = NSPredicate(format: "type == %d", TableSection.tea.rawValue)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true, selector: #selector(NSString.caseInsensitiveCompare(_:)))]
+        let teas: [TimerModel] = try! appDelegate().coreDataStack.managedObjectContext.fetch(request) as! [TimerModel]
         
         return teas
     }
@@ -32,8 +32,8 @@ class ListTableViewController: UITableViewController {
     var coffees: [TimerModel]?
     var teas: [TimerModel]?
     
-    lazy var fetchedResultsController: NSFetchedResultsController = {
-        let fetchRequest = NSFetchRequest(entityName: "TimerModel")
+    lazy var fetchedResultsController: NSFetchedResultsController<NSFetchRequestResult> = {
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "TimerModel")
         fetchRequest.sortDescriptors = [
             NSSortDescriptor(key: "type", ascending: true),
             NSSortDescriptor(key: "name", ascending: true)
@@ -44,20 +44,20 @@ class ListTableViewController: UITableViewController {
     }()
     
     enum TableSection: Int {
-        case Coffee = 0
-        case Tea
-        case NumberOfSections
+        case coffee = 0
+        case tea
+        case numberOfSections
     }
 
-    func timerModelForIndexPath(indexPath: NSIndexPath) -> TimerModel? {
+    func timerModelForIndexPath(_ indexPath: IndexPath) -> TimerModel? {
         var timerModel: TimerModel?
         
         switch indexPath.section {
-        case TableSection.Coffee.rawValue:
+        case TableSection.coffee.rawValue:
             if self.coffees!.count > 0 {
                 timerModel = coffees![indexPath.row]
             }
-        case TableSection.Tea.rawValue:
+        case TableSection.tea.rawValue:
             if self.teas!.count > 0 {
                 timerModel = teas![indexPath.row]
             }
@@ -69,11 +69,11 @@ class ListTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let error = NSErrorPointer()
+        let error: NSErrorPointer = nil
         do {
             try fetchedResultsController.performFetch()
         } catch let error1 as NSError {
-            error.memory = error1
+            error?.pointee = error1
             print("Error fetching: \(error)")
         }
         title = "Shopping List"
@@ -81,7 +81,7 @@ class ListTableViewController: UITableViewController {
         
     }
     
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         coffees = _coffees
         teas = _teas
@@ -95,94 +95,94 @@ class ListTableViewController: UITableViewController {
 
     // MARK: - Table view data source
 
-    override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+    override func numberOfSections(in tableView: UITableView) -> Int {
         // Return the number of sections.
-        return TableSection.NumberOfSections.rawValue
+        return TableSection.numberOfSections.rawValue
     }
     
-    override func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section == TableSection.Coffee.rawValue {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == TableSection.coffee.rawValue {
             return "Coffee"
         } else {
             return "Teas"
         }
     }
 
-    override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section.
         switch section {
-            case TableSection.Coffee.rawValue: return coffees!.count
-            case TableSection.Tea.rawValue: return teas!.count
+            case TableSection.coffee.rawValue: return coffees!.count
+            case TableSection.tea.rawValue: return teas!.count
             default: return 0
         }
     }
     
-    override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShopListCell", for: indexPath)
         if let timerModel: TimerModel = timerModelForIndexPath(indexPath) {
             cell.textLabel?.text = timerModel.name
             if timerModel.selected {
-                cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+                cell.accessoryType = UITableViewCellAccessoryType.checkmark
             }
             else {
-                cell.accessoryType = UITableViewCellAccessoryType.None
+                cell.accessoryType = UITableViewCellAccessoryType.none
             }
         }
 
         return cell
     }
     
-    override func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
+    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)
     {
         let headerView: UITableViewHeaderFooterView = (view as? UITableViewHeaderFooterView)!
         headerView.contentView.backgroundColor = UIColor(red: 0.8, green: 0.95, blue: 1, alpha: 0.5)
     }
     
-    override func tableView(tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 44.0
     }
     
-    override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath)
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier("ShopListCell", forIndexPath: indexPath) 
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ShopListCell", for: indexPath) 
         let timerModel = timerModelForIndexPath(indexPath)
         timerModel!.selected = !timerModel!.selected
         appDelegate().saveCoreData()
         
         if timerModel!.selected {
-            cell.accessoryType = UITableViewCellAccessoryType.Checkmark
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
         }
         else {
-            cell.accessoryType = UITableViewCellAccessoryType.None
+            cell.accessoryType = UITableViewCellAccessoryType.none
         }
     }
 }
 
 extension ListTableViewController: NSFetchedResultsControllerDelegate {
-    func controllerWillChangeContent(controller: NSFetchedResultsController) {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         
         tableView.beginUpdates()
     }
     
-    func controllerDidChangeContent(controller: NSFetchedResultsController) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
     }
 
-    func controller(controller: NSFetchedResultsController, didChangeObject anObject: AnyObject, atIndexPath indexPath: NSIndexPath?, forChangeType type: NSFetchedResultsChangeType, newIndexPath: NSIndexPath?)
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?)
     {
         switch type {
-        case .Insert:
+        case .insert:
             return
 //            tableView.insertRowsAtIndexPaths([newIndexPath!], withRowAnimation: .Automatic)
-        case .Delete:
+        case .delete:
             return
 //            tableView.deleteRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
-        case .Move:
+        case .move:
             return
 //            tableView.moveRowAtIndexPath(indexPath!, toIndexPath: newIndexPath!)
-        case .Update:
-            tableView.reloadRowsAtIndexPaths([indexPath!], withRowAnimation: .Automatic)
+        case .update:
+            tableView.reloadRows(at: [indexPath!], with: .automatic)
         }
     }
 }

@@ -14,13 +14,13 @@ class NFCheckboxButton: UIButton {
     override init(frame: CGRect)
     {
         super.init(frame: frame)
-        self.setImage(UIImage(named: "unchecked"), forState: UIControlState.Normal)
-        self.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)
+        self.setImage(UIImage(named: "unchecked"), for: UIControlState())
+        self.setImage(UIImage(named: "checked"), for: UIControlState.selected)
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.setImage(UIImage(named: "unchecked"), forState: UIControlState.Normal)
-        self.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)        
+        self.setImage(UIImage(named: "unchecked"), for: UIControlState())
+        self.setImage(UIImage(named: "checked"), for: UIControlState.selected)        
     }
 }

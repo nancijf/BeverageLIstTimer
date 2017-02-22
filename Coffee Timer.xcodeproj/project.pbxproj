@@ -225,6 +225,7 @@
 					B8E192911B7371E90073004F = {
 						CreatedOnToolsVersion = 6.4;
 						DevelopmentTeam = KD7N7R2FNY;
+						LastSwiftMigration = 0820;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
 								enabled = 0;
@@ -233,6 +234,7 @@
 					};
 					B8E192A61B7371E90073004F = {
 						CreatedOnToolsVersion = 6.4;
+						LastSwiftMigration = 0820;
 						TestTargetID = B8E192911B7371E90073004F;
 					};
 				};
@@ -448,6 +450,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "aa92d535-2970-4f01-98ac-445f19d4adf8";
 				PROVISIONING_PROFILE_SPECIFIER = "BeverageTime Distribution";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -466,6 +469,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "aa92d535-2970-4f01-98ac-445f19d4adf8";
 				PROVISIONING_PROFILE_SPECIFIER = "BeverageTime Distribution";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
@@ -482,6 +486,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "wildcatproductions.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Coffee Timer.app/Coffee Timer";
 			};
 			name = Debug;
@@ -494,6 +499,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = "wildcatproductions.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Coffee Timer.app/Coffee Timer";
 			};
 			name = Release;
