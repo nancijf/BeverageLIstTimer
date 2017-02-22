@@ -10,11 +10,13 @@ import UIKit
 import Foundation
 import CoreData
 
-@objc protocol BrandsTableViewControllerDelegate {
+@objc protocol BrandsTableViewControllerDelegate
+{
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel)
 }
 
-class BrandsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate {
+class BrandsTableViewController: UITableViewController, NSFetchedResultsControllerDelegate, UISearchBarDelegate
+{
     
     weak var delegate: BrandsTableViewControllerDelegate?
     var brandSelected: BrandModel?
@@ -25,7 +27,8 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     var filtered:[String] = []
     var brandCompletion: ((brand: BrandModel) -> ())?
     
-    lazy var searchBar:UISearchBar = {
+    lazy var searchBar:UISearchBar =
+    {
         let searchBar = UISearchBar(frame: CGRectMake(0, 0, 200, 20))
         return searchBar
     }()
@@ -39,6 +42,7 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: searchBar)
         self.navigationItem.setRightBarButtonItem(UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "hideSearchView:"), animated: true)
         searchBar.placeholder = "Brand Name"
+        searchBar.becomeFirstResponder()
         searchActive = true
     }
     
@@ -49,8 +53,11 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
         self.fetchedResultsController.fetchRequest.predicate = nil
         searchActive = false
         let error = NSErrorPointer()
-        if !fetchedResultsController.performFetch(error) {
-            println("Error fetching: \(error)")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Error fetching: \(error)")
         }
         tableView.reloadData()
     }
@@ -69,15 +76,18 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     {
         super.viewDidLoad()
         let error = NSErrorPointer()
-        if !fetchedResultsController.performFetch(error) {
-            println("Error fetching: \(error)")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Error fetching: \(error)")
         }
         self.title = "Brands"
         let request = NSFetchRequest(entityName: "BrandModel")
         request.sortDescriptors = [
             NSSortDescriptor(key: "name", ascending: true, selector: "caseInsensitiveCompare:")
         ]
-        let results: NSArray = appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request, error: nil)!
+        let results: NSArray = try! appDelegate().coreDataStack.managedObjectContext.executeFetchRequest(request)
         if brandSelected != nil {
             selectedIndex = NSIndexPath(forItem: results.indexOfObject(brandSelected!), inSection: 0)
         }
@@ -112,13 +122,13 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
 
     override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        let sectionInfo = fetchedResultsController.sections?[section] as? NSFetchedResultsSectionInfo
-        return sectionInfo?.numberOfObjects ?? 0
+        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[section])!
+        return sectionInfo.numberOfObjects ?? 0
     }
 
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell
     {
-        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) as! UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier(cellIdentifier, forIndexPath: indexPath) 
         let brandModel = brandModelForIndexPath(indexPath)
         cell.textLabel?.text = brandModel.name
         if brandSelected != nil && !searchActive {
@@ -150,25 +160,28 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     
     func brandsViewControllerDidFinishSelectingBrand(brand: BrandModel)
     {
-//        delegate?.brandsTableViewControllerDidFinishSelectingBrand(self, brand: brand)
         brandCompletion!(brand: brand)
     }
 
     /// MARK: - Search Bar Delegate 
     
-    func searchBarTextDidBeginEditing(searchBar: UISearchBar) {
+    func searchBarTextDidBeginEditing(searchBar: UISearchBar)
+    {
         searchActive = true;
     }
     
-    func searchBarTextDidEndEditing(searchBar: UISearchBar) {
+    func searchBarTextDidEndEditing(searchBar: UISearchBar)
+    {
         searchActive = false;
     }
     
-    func searchBarCancelButtonClicked(searchBar: UISearchBar) {
+    func searchBarCancelButtonClicked(searchBar: UISearchBar)
+    {
         searchActive = false;
     }
     
-    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+    func searchBarSearchButtonClicked(searchBar: UISearchBar)
+    {
         searchActive = false;
     }
     
@@ -176,12 +189,14 @@ class BrandsTableViewController: UITableViewController, NSFetchedResultsControll
     {
         fetchedResultsController.fetchRequest.predicate = NSPredicate(format: "name BEGINSWITH[cd] %@", searchText)
         let error = NSErrorPointer()
-        if !fetchedResultsController.performFetch(error) {
-            println("Error fetching: \(error)")
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error1 as NSError {
+            error.memory = error1
+            print("Error fetching: \(error)")
         }
-        let sectionInfo = fetchedResultsController.sections?[0] as? NSFetchedResultsSectionInfo
+        let sectionInfo: NSFetchedResultsSectionInfo = (fetchedResultsController.sections?[0])!
         tableView.reloadData()
-        println("search results is \(sectionInfo?.numberOfObjects)")
     }
 
 }

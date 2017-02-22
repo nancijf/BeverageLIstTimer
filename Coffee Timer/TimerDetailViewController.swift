@@ -21,9 +21,9 @@ class TimerDetailViewController: UIViewController {
     @IBOutlet weak var countdownLabel: UILabel!
     @IBOutlet weak var startStopButton: UIButton!
     @IBOutlet weak var favoriteButton: NFCheckboxButton!
-    @IBOutlet weak var brandField: UITextField!
-    @IBOutlet weak var coffeeTeaName: UITextField!
     @IBOutlet weak var resetTimer: UIButton!
+    @IBOutlet weak var coffeeTeaName: UILabel!
+    @IBOutlet weak var brandField: UILabel!
     
     var timerModel: TimerModel!
     weak var timer: NSTimer?
@@ -48,16 +48,10 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("in ViewDidLoad")
         title = "Timer"
     }
     
-//    deinit {
-//        timerModel.removeObserver(self, forKeyPath: "duration")
-//        timerModel.removeObserver(self, forKeyPath: "name")
-//    }
-    
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if keyPath == "duration" {
             countdownLabel.text = timerModel.durationText
         } else if keyPath == "name" {
@@ -67,7 +61,6 @@ class TimerDetailViewController: UIViewController {
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
-        println("in ViewWillLoad")
         coffeeTeaName.text = timerModel.name
         coffeeTeaName.enabled = false
         brandField.text = timerModel.brand.name
@@ -80,10 +73,8 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
-        println("brand in ViewDidAppear in TimerDetailViewController is \(timerModel.brand)")
-        println("favorite is \(timerModel.favorite)")
         // Request local notifications and set up local notification
-        let settings = UIUserNotificationSettings(forTypes: (.Alert | .Sound), categories: nil)
+        let settings = UIUserNotificationSettings(forTypes: ([.Alert, .Sound]), categories: nil)
         UIApplication.sharedApplication().registerUserNotificationSettings(settings)
     }
     
@@ -94,7 +85,6 @@ class TimerDetailViewController: UIViewController {
     
     override func viewDidDisappear(animated: Bool) {
         super.viewDidDisappear(animated)
-//        println("in ViewDidDisappear in TimerDetailViewController")
         stopTimer(.Cancelled)
     }
 
@@ -158,7 +148,6 @@ class TimerDetailViewController: UIViewController {
     }
     
     @IBAction func buttonWasPressed(sender: AnyObject) {
-//        println("Button was pressed.")
         if let _ = timer {
             // Timer is running and button was pressed. Stop timer.
             stopTimer(.Paused)
@@ -169,7 +158,6 @@ class TimerDetailViewController: UIViewController {
     }
     
     @IBAction func resetWasPressed(sender: AnyObject) {
-//        println("Reset was pressed.")
         stopTimer(.Cancelled)
     }
     

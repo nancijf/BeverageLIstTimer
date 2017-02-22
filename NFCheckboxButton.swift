@@ -18,7 +18,7 @@ class NFCheckboxButton: UIButton {
         self.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)
     }
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         self.setImage(UIImage(named: "unchecked"), forState: UIControlState.Normal)
         self.setImage(UIImage(named: "checked"), forState: UIControlState.Selected)        
