@@ -72,7 +72,7 @@
                                     <segment title="Tea"/>
                                 </segments>
                             </segmentedControl>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brand of Coffee" minimumFontSize="17" id="vlN-Bm-JuI">
+                            <textField opaque="NO" clipsSubviews="YES" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Brand of Coffee" minimumFontSize="17" id="vlN-Bm-JuI">
                                 <rect key="frame" x="16" y="146" width="288" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -154,7 +154,13 @@
                             <outlet property="delegate" destination="rZa-KA-Uxq" id="jfQ-Q9-C4i"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="D0z-d2-rGd"/>
+                    <navigationItem key="navigationItem" id="D0z-d2-rGd">
+                        <barButtonItem key="rightBarButtonItem" systemItem="search" id="qMF-KX-zKC">
+                            <connections>
+                                <action selector="showSearchView:" destination="rZa-KA-Uxq" id="RUV-jj-E2o"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sGN-d9-hrR" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -193,6 +199,9 @@
                                 <state key="normal">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="tapFavoriteButton:" destination="41o-Vr-6Lf" eventType="touchUpInside" id="s8J-OY-hi7"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Favorite" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="ewG-AN-j15">
                                 <rect key="frame" x="16" y="188" width="62" height="21"/>
@@ -272,10 +281,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" textLabel="fUf-0l-cWn" detailTextLabel="0nN-ym-4xT" style="IBUITableViewCellStyleValue1" id="2Ob-Fl-8Jc">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="2Ob-Fl-8Jc" id="Kyp-Nd-kGt">
-                                    <rect key="frame" x="0.0" y="0.0" width="287" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="287" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="fUf-0l-cWn">
@@ -328,10 +337,10 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
                             <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ShopListCell" id="fWN-wH-QH2">
-                                <rect key="frame" x="0.0" y="86" width="320" height="44"/>
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="fWN-wH-QH2" id="Y9A-BZ-NSp">
-                                    <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>
@@ -347,6 +356,49 @@
             </objects>
             <point key="canvasLocation" x="906" y="1018"/>
         </scene>
+        <!--Favorites Table View Controller-->
+        <scene sceneID="yuP-CE-rOI">
+            <objects>
+                <tableViewController id="oIc-16-r0g" customClass="FavoritesTableViewController" customModule="Coffee_Timer" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelection="NO" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" id="HcQ-Q1-J2j">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="VIj-Vm-kJi" detailTextLabel="3rN-Fd-lnZ" style="IBUITableViewCellStyleValue1" id="Q5b-2M-Ghe">
+                                <rect key="frame" x="0.0" y="22" width="320" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Q5b-2M-Ghe" id="kQR-iJ-NCM">
+                                    <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="VIj-Vm-kJi">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Detail" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3rN-Fd-lnZ">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                            <color key="textColor" red="0.55686274509803924" green="0.55686274509803924" blue="0.57647058823529407" alpha="1" colorSpace="calibratedRGB"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="oIc-16-r0g" id="fRy-qq-VaN"/>
+                            <outlet property="delegate" destination="oIc-16-r0g" id="4hs-Z1-VnN"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="qtu-nT-GKX"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Zlt-ii-qa3" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="906" y="1691"/>
+        </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="8ai-pj-kq2">
             <objects>
@@ -361,6 +413,7 @@
                     <connections>
                         <segue destination="r0L-dH-T2h" kind="relationship" relationship="viewControllers" id="9mb-R0-jUv"/>
                         <segue destination="qdq-3H-2ns" kind="relationship" relationship="viewControllers" id="7OD-Hv-YbZ"/>
+                        <segue destination="7Fx-XE-mlG" kind="relationship" relationship="viewControllers" id="9f3-mD-n8H"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4qg-ZL-zaD" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -407,6 +460,26 @@
             </objects>
             <point key="canvasLocation" x="374" y="1018"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="A7m-o8-was">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="7Fx-XE-mlG" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="7f0-CT-dVj"/>
+                    <toolbarItems/>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="mA7-Er-yap">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="oIc-16-r0g" kind="relationship" relationship="rootViewController" id="KjI-y0-XbI"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NRM-hZ-fgQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="374" y="1691"/>
+        </scene>
     </scenes>
     <resources>
         <image name="Drinks" width="30" height="30"/>
@@ -418,6 +491,6 @@
         <simulatedScreenMetrics key="destination" type="retina4"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="yka-H4-e7N"/>
+        <segue reference="Toz-Tv-De4"/>
     </inferredMetricsTieBreakers>
 </document>

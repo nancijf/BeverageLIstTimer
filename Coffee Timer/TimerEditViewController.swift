@@ -82,7 +82,9 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
         let numberOfMinutes = Int(timerModel.duration / 60)
         let numberOfSeconds = Int(timerModel.duration % 60)
         nameField.text = timerModel.name
-        brandField.text = timerModel.brand.name
+        if let brand = timerModel.brand as BrandModel? {
+            brandField.text = brand.name
+        }
         favoriteButton.selected = timerModel.favorite
         
         updateLabelsWithMinutes(numberOfMinutes, seconds: numberOfSeconds)
@@ -105,9 +107,15 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if segue.identifier == "BrandSelection" {
-            let viewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
-            viewController.delegate = self
-            viewController.brandSelected = sender as? BrandModel
+            let brandsTableViewController: BrandsTableViewController = segue.destinationViewController as! BrandsTableViewController
+//            brandsTableViewController.delegate = self
+            brandsTableViewController.brandCompletion = {(brand: BrandModel) -> () in self
+                println("brand: \(brand)")
+                self.timerModel.brand = brand
+                self.brandField.text = brand.name
+            }
+            
+            brandsTableViewController.brandSelected = sender as? BrandModel
         }
     }
     
@@ -152,11 +160,20 @@ class TimerEditViewController: UIViewController, UITextFieldDelegate, BrandsTabl
     }
     
     func textFieldShouldBeginEditing(textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-        self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
-        return false
+        if textField.tag == 1 {
+            textField.resignFirstResponder()
+            self.performSegueWithIdentifier("BrandSelection", sender: timerModel.brand)
+            return false
+        }
+        return true
     }
     
+}
+
+/// MARK: - BrandsTableViewControllerDelegate
+
+extension TimerEditViewController: BrandsTableViewControllerDelegate
+{
     func brandsTableViewControllerDidFinishSelectingBrand(viewController: BrandsTableViewController, brand: BrandModel) {
         println("brand: \(brand)")
         timerModel.brand = brand
